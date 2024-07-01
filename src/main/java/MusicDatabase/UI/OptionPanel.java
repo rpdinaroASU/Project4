@@ -7,7 +7,7 @@ public class OptionPanel extends SectionPanel {
 
     private OptionPanel() {
         super();
-        panel.setBackground(Color.GREEN);
+        panel.setBackground(optionsColor);
     }
 
     public static OptionPanel getInstance() {

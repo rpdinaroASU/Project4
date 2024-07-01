@@ -1,7 +1,9 @@
 package MusicDatabase.UI;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.sql.ResultSet;
 
 /**
  * This class is the context panel, the displayed values of the context panel are the returns of
@@ -11,14 +13,14 @@ import java.awt.*;
  */
 public class ContextPanel extends SectionPanel {
     private static ContextPanel contextPanelInstance;
-
+    private static JTable contextTable;
 
     /**
      * Singleton of the context panel
      */
     private ContextPanel() {
         super();
-        panel.setBackground(Color.BLUE);
+        panel.setBackground(mainColor);
         //TODO: CREATE CONTEXT PANEL
     }
 
@@ -34,9 +36,27 @@ public class ContextPanel extends SectionPanel {
         return contextPanelInstance;
     }
 
+    public static JTable getContextTable() {
+        return contextTable;
+    }
+
+    public static void setContextTable(ResultSet resultSet) {
+
+    }
 
     @Override
     public void buildPanel(Dimension panelDimension) {
+        if(contextTable==null) {
+            contextTable = new JTable();
+            contextTable.setPreferredScrollableViewportSize(panelDimension);
 
+            JScrollPane scrollPane = new JScrollPane(contextTable);
+            scrollPane.setBackground(mainColor);
+            contextTable.setBackground(mainColor);
+            panel.setBackground(mainColor);
+
+            panel.setPreferredSize(panelDimension);
+            panel.add(scrollPane);
+        }
     }
 }

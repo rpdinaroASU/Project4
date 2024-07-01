@@ -31,7 +31,7 @@ public class MainContainer {
     private MainContainer() {
         JFrame frame = new JFrame();
         final int MENU_WIDTH_DIVISOR = 4;
-        
+
 
         frame.setName("Music Database");
         frame.setFocusable(true);
@@ -40,7 +40,7 @@ public class MainContainer {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
-
+        //TODO:CODE SPAGHETTI
         //Set Menu Dimensions and add to container
         int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -50,6 +50,7 @@ public class MainContainer {
         MenuPanel menuPanel = MenuPanel.getInstance();
         menuPanel.getPanel().setPreferredSize(menuDimension);
         contentPane.add(MenuPanel.getInstance().getPanel());
+        //END TODO
 
         JPanel contextOptionPanel = new JPanel();
         contextOptionPanel.setLayout(new BoxLayout(contextOptionPanel, BoxLayout.Y_AXIS));
@@ -62,6 +63,7 @@ public class MainContainer {
         ContextPanel contextPanel = ContextPanel.getInstance();
         contextPanel.getPanel().setPreferredSize(
                 new Dimension(frame.getWidth(),frame.getHeight()*3/4));
+        contextPanel.buildPanel(contextPanel.getPanel().getPreferredSize());
 
         contextOptionPanel.add(optionPanel.getPanel());
         contextOptionPanel.add(contextPanel.getPanel());
