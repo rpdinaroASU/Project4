@@ -33,11 +33,12 @@ public class MainContainer {
         final int MENU_WIDTH_DIVISOR = 5;
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setVisible(true);
         frame.setName("Music Database");
         frame.setFocusable(true);
-        frame.setPreferredSize(new Dimension(1280,720));
-        frame.setPreferredSize(new Dimension(1280,720));
+        frame.setMinimumSize(new Dimension(1850,1000));
+
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
 
         //Set Menu Dimensions and add to container
@@ -46,7 +47,8 @@ public class MainContainer {
         Dimension menuDimension = new Dimension(menuSectionWidth,menuSectionHeight);
         MenuPanel.getInstance().buildPanel(menuDimension);
 
-        frame.add(MenuPanel.getInstance().getPanel(), BorderLayout.WEST);
+        contentPane.add(MenuPanel.getInstance().getPanel());
+        contentPane.add(Box.createHorizontalGlue());
 
         //ContextPanel contextPanel = ContextPanel.getInstance();
         //frame.add(contextPanel.getPanel());
@@ -61,6 +63,9 @@ public class MainContainer {
             }
         };
         frame.addWindowListener(exitListener);
+        contentPane.grabFocus();
+        frame.add(contentPane);
+        frame.setVisible(true);
     }
 
     /**
