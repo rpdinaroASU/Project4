@@ -2,7 +2,11 @@ package MusicDatabase.UI;
 
 import javax.swing.*;
 
-public abstract class PanelSection {
+/**
+ * This abstract class represents different panels of the
+ * MainContainer
+ */
+public abstract class SectionPanel {
     protected JPanel panel;
 
     /**

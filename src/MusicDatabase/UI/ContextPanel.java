@@ -8,7 +8,7 @@ import javax.swing.*;
  * @author Ryan Dinaro
  * @version 1.0.0
  */
-public class ContextPanel extends PanelSection {
+public class ContextPanel extends SectionPanel {
     private static ContextPanel contextPanelInstance;
 
 

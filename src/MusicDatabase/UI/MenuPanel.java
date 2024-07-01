@@ -8,7 +8,7 @@ import java.awt.*;
  * @author Ryan Dinaro
  * @version 1.0.0
  */
-public class MenuPanel extends PanelSection{
+public class MenuPanel extends SectionPanel{
     private static MenuPanel menuPanelInstance;
 
     /**
