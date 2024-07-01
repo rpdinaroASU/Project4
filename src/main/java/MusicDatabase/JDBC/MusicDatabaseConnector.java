@@ -9,13 +9,19 @@ public class MusicDatabaseConnector {
     private static String password = "Shamb00m!";
 
     public MusicDatabaseConnector() {
+
+    }
+    public static void ButtonPress(String TableName) {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, username, password);
-            stmt = conn.createStatement();
+            stmt = conn.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            );
             rs = stmt.executeQuery("SELECT * FROM ALBUM");
             ContextPanel.setContextTable(rs);
         } catch (SQLException e) {
@@ -23,6 +29,5 @@ public class MusicDatabaseConnector {
         } catch (ClassNotFoundException e) {
             System.err.println("Driver not found");
         }
-        ContextPanel.setContextTable(rs);
     }
 }
