@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 public class ContextPanel extends SectionPanel {
     private static ContextPanel contextPanelInstance;
     private static JTable contextTable;
+    private static ResultSet resultSet;
 
     /**
      * Singleton of the context panel
@@ -36,12 +37,12 @@ public class ContextPanel extends SectionPanel {
         return contextPanelInstance;
     }
 
-    public static JTable getContextTable() {
-        return contextTable;
+    public static ResultSet getResultSet() {
+        return resultSet;
     }
 
     public static void setContextTable(ResultSet resultSet) {
-
+        System.out.println("Made it this far");
     }
 
     @Override

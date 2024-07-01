@@ -4,6 +4,7 @@ package MusicDatabase.UI;
 
 
 import MusicDatabase.Utilities.ExitHandler;
+import MusicDatabase.JDBC.MusicDatabaseConnector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,14 +32,17 @@ public class MainContainer {
     private MainContainer() {
         JFrame frame = new JFrame();
         final int MENU_WIDTH_DIVISOR = 4;
+        final Color mainColor = new Color(219, 234, 186);
 
 
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setMinimumSize(new Dimension(1850,1000));
 
+
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
+
 
         //TODO:CODE SPAGHETTI
         //Set Menu Dimensions and add to container
@@ -55,6 +59,7 @@ public class MainContainer {
         JPanel contextOptionPanel = new JPanel();
         contextOptionPanel.setLayout(new BoxLayout(contextOptionPanel, BoxLayout.Y_AXIS));
         contextOptionPanel.setPreferredSize(new Dimension(frame.getWidth()*(MENU_WIDTH_DIVISOR-1)/MENU_WIDTH_DIVISOR,frame.getHeight()));
+
 
         OptionPanel optionPanel = OptionPanel.getInstance();
         optionPanel.getPanel().setPreferredSize(
@@ -83,6 +88,8 @@ public class MainContainer {
         contentPane.grabFocus();
         frame.add(contentPane);
         frame.setVisible(true);
+
+        new MusicDatabaseConnector();
     }
 
     /**
