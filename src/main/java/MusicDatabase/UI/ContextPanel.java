@@ -1,6 +1,7 @@
 package MusicDatabase.UI;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class is the context panel, the displayed values of the context panel are the returns of
@@ -33,4 +34,8 @@ public class ContextPanel extends SectionPanel {
     }
 
 
+    @Override
+    public void buildPanel(Dimension panelDimension) {
+
+    }
 }

@@ -15,25 +15,11 @@ public class MenuPanel extends SectionPanel{
      * This constructor creates the menu panel as a singleton
      */
     private MenuPanel() {
-        panel = new JPanel();
-        panel.setFocusable(true);
-        panel.setVisible(true);
-        panel.setBackground(Color.BLUE);
-
+        super();
+        panel.setAlignmentY(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(Box.createHorizontalStrut(panel.getHeight()/(MenuButtons.values().length+10)));
-        panel.add(Box.createGlue());
-        for(MenuButtons menuButton : MenuButtons.values()) {
-            JButton button = new JButton(menuButton.getButtonName());
-            button.addActionListener( e -> {
-                EventHandler.handleMenuButtonEvent(menuButton);
-            });
-            button.setPreferredSize(new Dimension(panel.getWidth()*3/4,panel.getHeight()/(MenuButtons.values().length+3)));
-            panel.add(button);
-            panel.add(Box.createGlue());
-            panel.add(Box.createHorizontalStrut(panel.getHeight()/(MenuButtons.values().length+3)));
-        }
     }
+
 
     /**
      * Returns and initializes a singleton instance of MenuPanel
@@ -45,6 +31,37 @@ public class MenuPanel extends SectionPanel{
             menuPanelInstance = new MenuPanel();
         }
         return menuPanelInstance;
+    }
+
+
+    @Override
+    public void buildPanel(Dimension panelDimension) {
+        panel.setPreferredSize(panelDimension);
+
+        final int panelWidth = (int) panel.getPreferredSize().getWidth();
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setPreferredSize(new Dimension(panelWidth*3/4, 56*MenuButtons.values().length));
+        buttonPanel.setMaximumSize(new Dimension(panelWidth*3/4, 56*MenuButtons.values().length));
+
+        for(MenuButtons menuButton : MenuButtons.values()) {
+            JButton button = new JButton(menuButton.getButtonName());
+            button.addActionListener( e -> {
+                EventHandler.handleMenuButtonEvent(menuButton);
+            });
+            Dimension buttonSize = new Dimension(panelWidth*3/4, 50);
+            button.setPreferredSize(buttonSize);
+            button.setMaximumSize(buttonSize);
+            buttonPanel.add(button);
+        }
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createHorizontalGlue());
+
+        panel.add(buttonPanel);
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createHorizontalGlue());
     }
 
 
