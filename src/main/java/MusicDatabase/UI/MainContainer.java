@@ -1,6 +1,8 @@
 package MusicDatabase.UI;
 
 
+
+
 import MusicDatabase.Utilities.ExitHandler;
 
 import javax.swing.*;
