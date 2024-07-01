@@ -1,5 +1,6 @@
 package MusicDatabase.JDBC;
 import MusicDatabase.UI.ContextPanel;
+import MusicDatabase.UI.MenuButtons;
 
 import java.sql.*;
 
@@ -8,10 +9,10 @@ public class MusicDatabaseConnector {
     private static String username = "lioninn";
     private static String password = "Shamb00m!";
 
-    public static void ButtonPress(String tableName) {
+    public static void buttonPress(MenuButtons button) {
         Connection conn;
-        ResultSet rs;
         Statement ps;
+        ResultSet rs;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, username, password);
@@ -19,7 +20,16 @@ public class MusicDatabaseConnector {
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             );
-            rs = ps.executeQuery("SELECT * FROM ALBUM");
+            rs = switch (button) {
+                case Songs -> ps.executeQuery("SELECT * FROM SONG");
+                case Albums -> ps.executeQuery("SELECT * FROM ALBUM");
+                case RecordLabels -> ps.executeQuery("SELECT * FROM RECORD_LABEL");
+                case Genres -> ps.executeQuery("SELECT * FROM GENRE");
+                case Contributors -> ps.executeQuery("SELECT * FROM CONTRIBUTOR");
+                case Playlists -> ps.executeQuery("SELECT * FROM PLAYLIST");
+                default -> ps.executeQuery("SELECT * FROM RECORD_LABEL");
+            };
+
             ContextPanel.setContextTable(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -27,4 +37,5 @@ public class MusicDatabaseConnector {
             System.err.println("Driver not found");
         }
     }
+
 }

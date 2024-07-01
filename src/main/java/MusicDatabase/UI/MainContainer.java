@@ -87,7 +87,7 @@ public class MainContainer {
         frame.add(contentPane);
         frame.setVisible(true);
 
-        MusicDatabaseConnector.ButtonPress("ALBUM");
+        MusicDatabaseConnector.buttonPress(MenuButtons.Albums);
     }
 
     /**
