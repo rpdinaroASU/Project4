@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class MusicDatabaseConnector {
     private static String url = "jdbc:mysql://localhost:3306/D5";
-    private static String username = "ryan";
+    private static String username = "lioninn";
     private static String password = "Shamb00m!";
 
     public MusicDatabaseConnector() {

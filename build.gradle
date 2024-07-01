@@ -6,7 +6,9 @@ plugins {
 repositories {
     mavenCentral()
 }
-
+dependencies {
+    runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
+}
 application {
     mainClass = 'MusicDatabase.Utilities.Main'
 }
