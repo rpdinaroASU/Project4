@@ -8,21 +8,18 @@ public class MusicDatabaseConnector {
     private static String username = "lioninn";
     private static String password = "Shamb00m!";
 
-    public MusicDatabaseConnector() {
-
-    }
-    public static void ButtonPress(String TableName) {
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+    public static void ButtonPress(String tableName) {
+        Connection conn;
+        ResultSet rs;
+        Statement ps;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, username, password);
-            stmt = conn.createStatement(
+            ps = conn.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             );
-            rs = stmt.executeQuery("SELECT * FROM ALBUM");
+            rs = ps.executeQuery("SELECT * FROM ALBUM");
             ContextPanel.setContextTable(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
