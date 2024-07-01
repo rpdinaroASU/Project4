@@ -43,8 +43,10 @@ public class MainContainer {
 
         //Set Menu Dimensions and add to container
         int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        int screenHeight = (int) toolkit.getScreenSize().getHeight();
         int menuSectionHeight = frame.getHeight();
-        Dimension menuDimension = new Dimension(menuSectionWidth,menuSectionHeight);
+        Dimension menuDimension = new Dimension(menuSectionWidth,screenHeight);
         MenuPanel.getInstance().buildPanel(menuDimension);
 
         contentPane.add(MenuPanel.getInstance().getPanel());

@@ -38,6 +38,7 @@ public class MenuPanel extends SectionPanel{
     @Override
     public void buildPanel(Dimension panelDimension) {
         panel.setPreferredSize(panelDimension);
+        Dimension maxSize = new Dimension(panelDimension.width, Toolkit.getDefaultToolkit().getScreenResolution());
         panel.setMaximumSize(panelDimension);
 
         final int panelWidth = (int) panel.getPreferredSize().getWidth();
