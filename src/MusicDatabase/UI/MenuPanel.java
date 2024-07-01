@@ -3,9 +3,10 @@ package MusicDatabase.UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class Menu {
+public class MenuPanel {
+    private static MenuPanel menuPanelInstance;
     private JPanel menuPanel;
-    public Menu() {
+    private MenuPanel() {
         menuPanel = new JPanel();
         menuPanel.setFocusable(true);
         menuPanel.setVisible(true);
@@ -21,6 +22,13 @@ public class Menu {
             menuPanel.add(button);
             menuPanel.add(Box.createGlue());
         }
+    }
+
+    public static MenuPanel getInstance() {
+        if(menuPanelInstance == null) {
+            menuPanelInstance = new MenuPanel();
+        }
+        return menuPanelInstance;
     }
 
     public JPanel getMenuPanel() {

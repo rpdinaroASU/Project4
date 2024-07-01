@@ -8,7 +8,7 @@ package MusicDatabase.UI;
 public class EventHandler {
 
     /**
-     * This method handles Menu Button presses and switches the context panel accordingly
+     * This method handles MenuPanel Button presses and switches the context panel accordingly
      * @param button the button pressed
      */
     public static void handleMenuButtonEvent(MenuButtons button) {

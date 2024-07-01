@@ -6,7 +6,7 @@ import java.awt.*;
 
 /**
  * This class is a Singleton of the UI, this ensures that only one instance of the UI can be called at once.
- * The Main Container is composed of three distinct sections, the Menu to the left which allows
+ * The Main Container is composed of three distinct sections, the MenuPanel to the left which allows
  * a User to select the context of their interaction with the database, the ContextPane in the center that
  * displays ResultSets according to user specification, Options above the Context pane which will
  * allow the user to do common actions, such as adding, deleting, updating, and applying filters.
@@ -29,8 +29,7 @@ public class MainContainer {
         frame.setFocusable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        Menu menu = new Menu();
-        frame.add(menu.getMenuPanel(), BorderLayout.WEST);
+        frame.add(MenuPanel.getInstance().getMenuPanel(), BorderLayout.WEST);
 
         ContextPanel contextPanel = ContextPanel.getInstance();
         frame.add(contextPanel.getContextPanel());
