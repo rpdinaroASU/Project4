@@ -22,6 +22,8 @@ public class ContextPanel extends SectionPanel {
     private ContextPanel() {
         super();
         panel.setBackground(mainColor);
+        panel.setLayout(new BorderLayout());
+
         //TODO: CREATE CONTEXT PANEL
     }
 
@@ -53,11 +55,16 @@ public class ContextPanel extends SectionPanel {
 
             JScrollPane scrollPane = new JScrollPane(contextTable);
             scrollPane.setBackground(mainColor);
-            contextTable.setBackground(mainColor);
+            scrollPane.setPreferredSize(new Dimension(panelDimension.width*3/4, panelDimension.height*3/4));
+
             panel.setBackground(mainColor);
 
             panel.setPreferredSize(panelDimension);
-            panel.add(scrollPane);
+            panel.add(scrollPane,BorderLayout.CENTER);
+            panel.add(Box.createVerticalStrut(panelDimension.height/8),BorderLayout.NORTH);
+            panel.add(Box.createVerticalStrut(panelDimension.height/8),BorderLayout.SOUTH);
+            panel.add(Box.createHorizontalStrut(panelDimension.width/16),BorderLayout.EAST);
+            panel.add(Box.createHorizontalStrut(panelDimension.width/16),BorderLayout.WEST);
         }
     }
 }
