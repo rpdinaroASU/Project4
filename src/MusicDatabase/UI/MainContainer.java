@@ -6,15 +6,22 @@ import java.awt.*;
 
 public class MainContainer {
     private static MainContainer mainContainer;
-    private JFrame frame;
+
+    private final JFrame frame;
     private MainContainer() {
         frame = new JFrame();
+
         frame.setVisible(true);
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        frame.add(createMenuButtons());
+        Menu menu = new Menu();
+        frame.add(menu.getMenuPanel(), BorderLayout.WEST);
+
+        ContextPanel contextPanel = ContextPanel.getInstance();
+        frame.add(contextPanel.getContextPanel());
+
 
         //TODO: CHANGE TO CLOSE ALL RESOURCES ON EXIT
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -27,25 +34,5 @@ public class MainContainer {
         }
         return mainContainer;
     }
-
-    private JPanel createMenuButtons() {
-        JPanel panel = new JPanel();
-        panel.setFocusable(true);
-        panel.setVisible(true);
-        panel.setPreferredSize(new Dimension(1000,300));
-
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        for(MenuButtons menuButton : MenuButtons.values()) {
-            JButton button = new JButton(menuButton.getButtonName());
-            button.addActionListener( e -> {
-                EventHandler.handleMenuButtonEvent(menuButton);
-            });
-            button.setPreferredSize(new Dimension(200,400));
-            panel.add(button);
-            panel.add(Box.createGlue());
-        }
-        return panel;
-    }
-
 
 }
