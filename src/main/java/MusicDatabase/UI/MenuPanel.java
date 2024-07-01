@@ -60,7 +60,6 @@ public class MenuPanel extends SectionPanel{
                 buttonPanel.add(button);
             }
 
-            panel.add(Box.createVerticalGlue());
             panel.add(Box.createHorizontalGlue());
 
             JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

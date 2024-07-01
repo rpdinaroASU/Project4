@@ -61,10 +61,11 @@ public class ContextPanel extends SectionPanel {
 
             panel.setPreferredSize(panelDimension);
             panel.add(scrollPane,BorderLayout.CENTER);
-            panel.add(Box.createVerticalStrut(panelDimension.height/8),BorderLayout.NORTH);
-            panel.add(Box.createVerticalStrut(panelDimension.height/8),BorderLayout.SOUTH);
-            panel.add(Box.createHorizontalStrut(panelDimension.width/16),BorderLayout.EAST);
-            panel.add(Box.createHorizontalStrut(panelDimension.width/16),BorderLayout.WEST);
+            int structSize = panelDimension.height/8;
+            panel.add(Box.createVerticalStrut(structSize),BorderLayout.NORTH);
+            panel.add(Box.createVerticalStrut(structSize),BorderLayout.SOUTH);
+            panel.add(Box.createHorizontalStrut(structSize),BorderLayout.EAST);
+            panel.add(Box.createHorizontalStrut(structSize),BorderLayout.WEST);
         }
     }
 }

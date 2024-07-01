@@ -32,10 +32,8 @@ public class MainContainer {
     private MainContainer() {
         JFrame frame = new JFrame();
         final int MENU_WIDTH_DIVISOR = 4;
-        final Color mainColor = new Color(219, 234, 186);
 
-
-        frame.setName("Music Database");
+        frame.setTitle("Music Database");
         frame.setFocusable(true);
         frame.setMinimumSize(new Dimension(1850,1000));
 
