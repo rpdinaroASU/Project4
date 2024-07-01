@@ -30,9 +30,9 @@ public class MainContainer {
      */
     private MainContainer() {
         JFrame frame = new JFrame();
-        final int MENU_WIDTH_DIVISOR = 5;
+        final int MENU_WIDTH_DIVISOR = 4;
+        
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setMinimumSize(new Dimension(1850,1000));
@@ -45,16 +45,29 @@ public class MainContainer {
         int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int screenHeight = (int) toolkit.getScreenSize().getHeight();
-        int menuSectionHeight = frame.getHeight();
         Dimension menuDimension = new Dimension(menuSectionWidth,screenHeight);
         MenuPanel.getInstance().buildPanel(menuDimension);
-
+        MenuPanel menuPanel = MenuPanel.getInstance();
+        menuPanel.getPanel().setPreferredSize(menuDimension);
         contentPane.add(MenuPanel.getInstance().getPanel());
-        contentPane.add(Box.createHorizontalGlue());
 
-        //ContextPanel contextPanel = ContextPanel.getInstance();
-        //frame.add(contextPanel.getPanel());
+        JPanel contextOptionPanel = new JPanel();
+        contextOptionPanel.setLayout(new BoxLayout(contextOptionPanel, BoxLayout.Y_AXIS));
+        contextOptionPanel.setPreferredSize(new Dimension(frame.getWidth()*(MENU_WIDTH_DIVISOR-1)/MENU_WIDTH_DIVISOR,frame.getHeight()));
 
+        OptionPanel optionPanel = OptionPanel.getInstance();
+        optionPanel.getPanel().setPreferredSize(
+                new Dimension(frame.getWidth(),frame.getHeight()/4));
+
+        ContextPanel contextPanel = ContextPanel.getInstance();
+        contextPanel.getPanel().setPreferredSize(
+                new Dimension(frame.getWidth(),frame.getHeight()*3/4));
+
+        contextOptionPanel.add(optionPanel.getPanel());
+        contextOptionPanel.add(contextPanel.getPanel());
+
+        contextOptionPanel.setVisible(true);
+        contentPane.add(contextOptionPanel);
 
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         WindowListener exitListener = new WindowAdapter() {

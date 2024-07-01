@@ -37,18 +37,19 @@ public class MenuPanel extends SectionPanel{
 
     @Override
     public void buildPanel(Dimension panelDimension) {
-        panel.setPreferredSize(panelDimension);
-        Dimension maxSize = new Dimension(panelDimension.width, Toolkit.getDefaultToolkit().getScreenResolution());
-        panel.setMaximumSize(panelDimension);
+        //panel.setPreferredSize(panelDimension);
+        //panel.setMaximumSize(panelDimension);
 
-        final int panelWidth = (int) panel.getPreferredSize().getWidth();
+        final int panelWidth = (int) panelDimension.getWidth();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(panelWidth*3/4, 56*MenuButtons.values().length));
         buttonPanel.setMaximumSize(new Dimension(panelWidth*3/4, 56*MenuButtons.values().length));
+        Font buttonFont = new Font("Times New Roman", Font.BOLD, 20);
 
         for(MenuButtons menuButton : MenuButtons.values()) {
             JButton button = new JButton(menuButton.getButtonName());
+            button.setFont(buttonFont);
             button.addActionListener( e -> {
                 EventHandler.handleMenuButtonEvent(menuButton);
             });

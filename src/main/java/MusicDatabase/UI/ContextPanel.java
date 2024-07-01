@@ -17,7 +17,8 @@ public class ContextPanel extends SectionPanel {
      * Singleton of the context panel
      */
     private ContextPanel() {
-        panel = new JPanel();
+        super();
+        panel.setBackground(Color.BLUE);
         //TODO: CREATE CONTEXT PANEL
     }
 
