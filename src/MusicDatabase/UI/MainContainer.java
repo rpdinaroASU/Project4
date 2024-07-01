@@ -1,8 +1,13 @@
 package MusicDatabase.UI;
 
 
+import MusicDatabase.Utilities.ExitHandler;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /**
  * This class is a Singleton of the UI, this ensures that only one instance of the UI can be called at once.
@@ -23,14 +28,14 @@ public class MainContainer {
      */
     private MainContainer() {
         JFrame frame = new JFrame();
-        final int MENU_WIDTH_DIVISOR = 3;
+        final int MENU_WIDTH_DIVISOR = 5;
 
         frame.setVisible(true);
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-
+        //Set Menu Dimensions and add to container
         int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
         int menuSectionHeight = frame.getHeight();
         Dimension menuDimension = new Dimension(menuSectionWidth,menuSectionHeight);
@@ -42,8 +47,15 @@ public class MainContainer {
         frame.add(contextPanel.getPanel());
 
 
-        //TODO: CHANGE TO CLOSE ALL RESOURCES ON EXIT
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+                ExitHandler.exitTriggered();
+            }
+        };
+        frame.addWindowListener(exitListener);
     }
 
     /**

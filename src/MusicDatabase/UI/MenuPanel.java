@@ -18,17 +18,20 @@ public class MenuPanel extends SectionPanel{
         panel = new JPanel();
         panel.setFocusable(true);
         panel.setVisible(true);
-        panel.setPreferredSize(new Dimension(1000,300));
+        panel.setBackground(Color.BLUE);
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(Box.createHorizontalStrut(panel.getHeight()/(MenuButtons.values().length+10)));
+        panel.add(Box.createGlue());
         for(MenuButtons menuButton : MenuButtons.values()) {
             JButton button = new JButton(menuButton.getButtonName());
             button.addActionListener( e -> {
                 EventHandler.handleMenuButtonEvent(menuButton);
             });
-            button.setPreferredSize(new Dimension(200,400));
+            button.setPreferredSize(new Dimension(panel.getWidth()*3/4,panel.getHeight()/(MenuButtons.values().length+3)));
             panel.add(button);
             panel.add(Box.createGlue());
+            panel.add(Box.createHorizontalStrut(panel.getHeight()/(MenuButtons.values().length+3)));
         }
     }
 
