@@ -1,4 +1,4 @@
-package MusicDatabase;
+package MusicDatabase.Utilities;
 
 import MusicDatabase.UI.MainContainer;
 

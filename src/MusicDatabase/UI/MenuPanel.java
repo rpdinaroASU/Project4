@@ -3,9 +3,18 @@ package MusicDatabase.UI;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class contains the menu options for the Music Database
+ * @author Ryan Dinaro
+ * @version 1.0.0
+ */
 public class MenuPanel {
     private static MenuPanel menuPanelInstance;
-    private JPanel menuPanel;
+    private final JPanel menuPanel;
+
+    /**
+     * This constructor creates the menu panel as a singleton
+     */
     private MenuPanel() {
         menuPanel = new JPanel();
         menuPanel.setFocusable(true);
@@ -24,6 +33,10 @@ public class MenuPanel {
         }
     }
 
+    /**
+     * Returns and initializes a singleton instance of MenuPanel
+     * @return singleton instance of MenuPanel
+     */
     public static MenuPanel getInstance() {
         if(menuPanelInstance == null) {
             menuPanelInstance = new MenuPanel();
@@ -31,6 +44,10 @@ public class MenuPanel {
         return menuPanelInstance;
     }
 
+    /**
+     * Returns the panel in this singleton
+     * @return panel in this singleton
+     */
     public JPanel getMenuPanel() {
         return menuPanel;
     }
