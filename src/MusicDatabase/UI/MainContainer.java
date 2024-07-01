@@ -29,10 +29,10 @@ public class MainContainer {
         frame.setFocusable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        frame.add(MenuPanel.getInstance().getMenuPanel(), BorderLayout.WEST);
+        frame.add(MenuPanel.getInstance().getPanel(), BorderLayout.WEST);
 
         ContextPanel contextPanel = ContextPanel.getInstance();
-        frame.add(contextPanel.getContextPanel());
+        frame.add(contextPanel.getPanel());
 
 
         //TODO: CHANGE TO CLOSE ALL RESOURCES ON EXIT

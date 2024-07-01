@@ -19,6 +19,6 @@ public class EventHandler {
 
 
 
-        ContextPanel.getInstance().getContextPanel().updateUI();
+        ContextPanel.getInstance().getPanel().updateUI();
     }
 }

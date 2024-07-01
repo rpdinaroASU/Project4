@@ -8,15 +8,15 @@ import javax.swing.*;
  * @author Ryan Dinaro
  * @version 1.0.0
  */
-public class ContextPanel {
+public class ContextPanel extends PanelSection {
     private static ContextPanel contextPanelInstance;
-    private final JPanel contextPanel;
+
 
     /**
      * Singleton of the context panel
      */
     private ContextPanel() {
-        contextPanel = new JPanel();
+        panel = new JPanel();
         //TODO: CREATE CONTEXT PANEL
     }
 
@@ -32,11 +32,5 @@ public class ContextPanel {
         return contextPanelInstance;
     }
 
-    /**
-     * returns the contextPanel JPanel
-     * @return JPanel containing the contextPanel
-     */
-    public JPanel getContextPanel() {
-        return contextPanel;
-    }
+
 }
