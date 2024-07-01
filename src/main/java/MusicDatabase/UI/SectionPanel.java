@@ -9,7 +9,10 @@ import java.awt.*;
  */
 public abstract class SectionPanel {
     protected JPanel panel;
-    protected Color panelColor;
+    protected Color mainColor = new Color(219, 234, 186);
+    protected Color optionsColor = new Color(200, 186, 234);
+    protected Color menuColor = new Color(152, 124, 215);
+
     public SectionPanel() {
         panel = new JPanel();
         panel.setFocusable(true);
