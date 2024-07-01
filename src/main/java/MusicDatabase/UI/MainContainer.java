@@ -37,6 +37,7 @@ public class MainContainer {
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setPreferredSize(new Dimension(1280,720));
+        frame.setPreferredSize(new Dimension(1280,720));
 
 
         //Set Menu Dimensions and add to container
@@ -47,8 +48,8 @@ public class MainContainer {
 
         frame.add(MenuPanel.getInstance().getPanel(), BorderLayout.WEST);
 
-        ContextPanel contextPanel = ContextPanel.getInstance();
-        frame.add(contextPanel.getPanel());
+        //ContextPanel contextPanel = ContextPanel.getInstance();
+        //frame.add(contextPanel.getPanel());
 
 
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

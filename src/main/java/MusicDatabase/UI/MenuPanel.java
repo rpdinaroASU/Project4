@@ -16,6 +16,7 @@ public class MenuPanel extends SectionPanel{
      */
     private MenuPanel() {
         super();
+        panelColor = Color.GRAY;
         panel.setAlignmentY(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     }
@@ -58,10 +59,21 @@ public class MenuPanel extends SectionPanel{
         panel.add(Box.createVerticalGlue());
         panel.add(Box.createHorizontalGlue());
 
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        labelPanel.setMaximumSize(new Dimension(150,150));
+        JLabel label = new JLabel("Menu");
+        label.setFont(new Font("Algerian", Font.BOLD, 50));
+        labelPanel.add(label);
+
+        panel.add(labelPanel);
         panel.add(buttonPanel);
 
         panel.add(Box.createVerticalGlue());
         panel.add(Box.createHorizontalGlue());
+
+        labelPanel.setBackground(panelColor);
+        buttonPanel.setBackground(panelColor);
+        panel.setBackground(panelColor);
     }
 
 

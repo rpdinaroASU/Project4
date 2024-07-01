@@ -9,11 +9,11 @@ import java.awt.*;
  */
 public abstract class SectionPanel {
     protected JPanel panel;
+    protected Color panelColor;
     public SectionPanel() {
         panel = new JPanel();
         panel.setFocusable(true);
         panel.setVisible(true);
-        panel.setBackground(Color.BLUE);
     }
 
     /**
