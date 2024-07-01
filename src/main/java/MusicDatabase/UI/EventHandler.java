@@ -1,5 +1,7 @@
 package MusicDatabase.UI;
 
+import MusicDatabase.JDBC.MusicDatabaseConnector;
+
 /**
  * This class handles all interactions with the UI
  * @author Ryan Dinaro
@@ -12,13 +14,6 @@ public class EventHandler {
      * @param button the button pressed
      */
     public static void handleMenuButtonEvent(MenuButtons button) {
-        System.out.println(button.getButtonName());
-        //TODO: SWITCH CONTEXT PANELS ON BUTTON PRESS
-
-
-
-
-
-        ContextPanel.getInstance().getPanel().updateUI();
+        MusicDatabaseConnector.buttonPress(button);
     }
 }
