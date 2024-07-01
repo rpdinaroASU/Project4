@@ -23,13 +23,20 @@ public class MainContainer {
      */
     private MainContainer() {
         JFrame frame = new JFrame();
+        final int MENU_WIDTH_DIVISOR = 3;
 
         frame.setVisible(true);
         frame.setName("Music Database");
         frame.setFocusable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        frame.add(MenuPanel.getInstance().getPanel(), BorderLayout.WEST);
+
+        int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
+        int menuSectionHeight = frame.getHeight();
+        Dimension menuDimension = new Dimension(menuSectionWidth,menuSectionHeight);
+        JPanel menuPanel =  MenuPanel.getInstance().getPanel();
+        menuPanel.setPreferredSize(menuDimension);
+        frame.add(menuPanel, BorderLayout.WEST);
 
         ContextPanel contextPanel = ContextPanel.getInstance();
         frame.add(contextPanel.getPanel());
