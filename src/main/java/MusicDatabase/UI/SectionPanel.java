@@ -12,6 +12,7 @@ public abstract class SectionPanel {
     protected Color mainColor = new Color(219, 234, 186);
     protected Color optionsColor = new Color(200, 186, 234);
     protected Color menuColor = new Color(152, 124, 215);
+    protected Font buttonFont = new Font("Times New Roman", Font.BOLD, 20);
 
     public SectionPanel() {
         panel = new JPanel();

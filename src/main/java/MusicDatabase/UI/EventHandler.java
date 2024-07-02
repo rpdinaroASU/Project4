@@ -16,4 +16,12 @@ public class EventHandler {
     public static void handleMenuButtonEvent(MenuButtons button) {
         MusicDatabaseConnector.buttonPress(button);
     }
+
+    public static void handleOptionButtonEvent(String s) {
+        System.out.println(s);
+    }
+
+    public static void handleComboBoxSelect(Object source) {
+        System.out.println(source.toString());
+    }
 }

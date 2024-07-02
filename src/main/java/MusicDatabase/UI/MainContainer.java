@@ -62,6 +62,7 @@ public class MainContainer {
         OptionPanel optionPanel = OptionPanel.getInstance();
         optionPanel.getPanel().setPreferredSize(
                 new Dimension(frame.getWidth(),frame.getHeight()/4));
+        optionPanel.buildPanel(optionPanel.getPanel().getPreferredSize());
 
         ContextPanel contextPanel = ContextPanel.getInstance();
         contextPanel.getPanel().setPreferredSize(

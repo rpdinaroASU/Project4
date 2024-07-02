@@ -46,7 +46,7 @@ public class MenuPanel extends SectionPanel{
             JPanel buttonPanel = new JPanel();
             buttonPanel.setPreferredSize(new Dimension(panelWidth * 3 / 4, 56 * MenuButtons.values().length));
             buttonPanel.setMaximumSize(new Dimension(panelWidth * 3 / 4, 56 * MenuButtons.values().length));
-            Font buttonFont = new Font("Times New Roman", Font.BOLD, 20);
+
 
             for (MenuButtons menuButton : MenuButtons.values()) {
                 JButton button = new JButton(menuButton.getButtonName());
