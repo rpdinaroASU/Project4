@@ -2,9 +2,14 @@ package MusicDatabase.UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class OptionPanel extends SectionPanel {
     private static OptionPanel optionPanelInstance;
+    private static JComboBox<String> comboBox;
 
     private OptionPanel() {
         super();
@@ -20,18 +25,20 @@ public class OptionPanel extends SectionPanel {
         return optionPanelInstance;
     }
 
+    public static String getComboBoxSelection() {
+        return Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+    }
+
+    public static void notifyMenuButtonPress() {
+        comboBox.removeAllItems();
+    }
+
     @Override
     public void buildPanel(Dimension panelDimension) {
-        JComboBox<String> comboBox = new JComboBox<String>();
+        comboBox = new JComboBox<String>();
         comboBox.setPreferredSize(new Dimension(panelDimension.width/2, panelDimension.height/5));
         comboBox.setMaximumSize(new Dimension(panelDimension.width/2, panelDimension.height/5));
         comboBox.setFont(entryFont);
-        comboBox.addItem("Add");
-        comboBox.setSelectedIndex(0);
-
-        comboBox.addActionListener(e -> {
-            EventHandler.handleComboBoxSelect(e.getSource());
-        });
 
         panel.add(Box.createHorizontalGlue());
         panel.add(Box.createHorizontalStrut(panelDimension.height/5));
@@ -52,8 +59,18 @@ public class OptionPanel extends SectionPanel {
         }
         panel.add(Box.createHorizontalGlue());
 
+    }
 
-
-
+    public static void setComboBox(ResultSet rs) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        while(rs.next()) {
+            StringBuilder primaryKeyString = new StringBuilder();
+            for(int i = 0; i < rsmd.getColumnCount(); i++){
+                primaryKeyString.append(rs.getString(i + 1));
+                if(i != rsmd.getColumnCount() - 1)
+                    primaryKeyString.append(", ");
+            }
+            comboBox.addItem(primaryKeyString.toString());
+        }
     }
 }

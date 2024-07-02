@@ -2,6 +2,8 @@ package MusicDatabase.UI;
 
 import MusicDatabase.JDBC.MusicDatabaseConnector;
 
+import java.sql.ResultSet;
+
 /**
  * This class handles all interactions with the UI
  * @author Ryan Dinaro
@@ -14,7 +16,9 @@ public class EventHandler {
      * @param button the button pressed
      */
     public static void handleMenuButtonEvent(MenuButtons button) {
+        OptionPanel.notifyMenuButtonPress();
         MusicDatabaseConnector.buttonPress(button);
+
     }
 
     public static void handleOptionButtonEvent(OptionButtons optionButton) {
@@ -26,14 +30,12 @@ public class EventHandler {
 
         }
         else if(optionButton == OptionButtons.Edit) {
-
+            String pkSelection = OptionPanel.getComboBoxSelection();
         }
         else if(optionButton == OptionButtons.Filter) {
 
         }
     }
 
-    public static void handleComboBoxSelect(Object source) {
-        System.out.println(source.toString());
-    }
+
 }
