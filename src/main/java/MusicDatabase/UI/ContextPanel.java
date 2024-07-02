@@ -21,6 +21,7 @@ public class ContextPanel extends SectionPanel {
     private static JScrollPane scrollPane;
     private static ResultSet resultSet;
     private static JPanel contextPanel;
+    private static Font eFont;
 
     /**
      * Singleton of the context panel
@@ -29,6 +30,7 @@ public class ContextPanel extends SectionPanel {
         super();
         panel.setBackground(mainColor);
         panel.setLayout(new BorderLayout());
+        eFont = entryFont;
 
         //TODO: CREATE CONTEXT PANEL
     }
@@ -70,11 +72,10 @@ public class ContextPanel extends SectionPanel {
         contextTable.getTableHeader().setFont(new Font("Times new Roman", Font.BOLD, 25));
         contextTable.setPreferredScrollableViewportSize(new Dimension(contextTableSize.width*3/4, contextTableSize.height*3/4));
         contextTable.updateUI();
-        Font entryFont = new Font("Times new Roman", Font.PLAIN, 20);
-        contextTable.setFont(entryFont);
+        contextTable.setFont(eFont);
 
         final int rowPadding = 20;
-        int rowHeight = contextPanel.getFontMetrics(entryFont).getHeight() + rowPadding;
+        int rowHeight = contextPanel.getFontMetrics(eFont).getHeight() + rowPadding;
         contextTable.setRowHeight(rowHeight);
 
         if (scrollPane != null) {

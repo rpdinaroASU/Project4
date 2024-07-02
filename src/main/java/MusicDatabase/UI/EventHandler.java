@@ -17,8 +17,20 @@ public class EventHandler {
         MusicDatabaseConnector.buttonPress(button);
     }
 
-    public static void handleOptionButtonEvent(String s) {
-        System.out.println(s);
+    public static void handleOptionButtonEvent(OptionButtons optionButton) {
+        //TODO: HANDLE INSERTS (ADD), UPDATES(EDIT), DELETIONS(REMOVE), AND ADDITIONAL SELECTION OPTIONS(FILTER)
+        if(optionButton == OptionButtons.Add) {
+
+        }
+        else if(optionButton == OptionButtons.Remove) {
+
+        }
+        else if(optionButton == OptionButtons.Edit) {
+
+        }
+        else if(optionButton == OptionButtons.Filter) {
+
+        }
     }
 
     public static void handleComboBoxSelect(Object source) {

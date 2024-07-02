@@ -25,10 +25,13 @@ public class OptionPanel extends SectionPanel {
         JComboBox<String> comboBox = new JComboBox<String>();
         comboBox.setPreferredSize(new Dimension(panelDimension.width/2, panelDimension.height/5));
         comboBox.setMaximumSize(new Dimension(panelDimension.width/2, panelDimension.height/5));
+        comboBox.setFont(entryFont);
+        comboBox.addItem("Add");
+        comboBox.setSelectedIndex(0);
+
         comboBox.addActionListener(e -> {
             EventHandler.handleComboBoxSelect(e.getSource());
         });
-        String[] buttonText = {"Add", "Remove", "Edit", "Filter"};
 
         panel.add(Box.createHorizontalGlue());
         panel.add(Box.createHorizontalStrut(panelDimension.height/5));
@@ -37,11 +40,11 @@ public class OptionPanel extends SectionPanel {
         final int buttonSpacerDivisor = 10;
         panel.add(Box.createHorizontalStrut(panelDimension.height/buttonSpacerDivisor));
 
-        for(String s: buttonText) {
-            JButton button = new JButton(s);
+        for(OptionButtons optionButtons: OptionButtons.values()) {
+            JButton button = new JButton(optionButtons.getButtonName());
             button.setPreferredSize(new Dimension(panelDimension.width/8, panelDimension.height/5));
             button.addActionListener(e -> {
-                EventHandler.handleOptionButtonEvent(s);
+                EventHandler.handleOptionButtonEvent(optionButtons);
             });
             button.setFont(buttonFont);
             panel.add(button);
