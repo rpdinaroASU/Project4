@@ -4,16 +4,26 @@ import MusicDatabase.UI.MenuButtons;
 import MusicDatabase.UI.OptionPanel;
 
 import java.sql.*;
+import java.util.Objects;
 
+/**
+ * Database connector, handles interactions between the UI and database
+ * @author Ryan Dinaro
+ * @verion 1.0.0
+ */
 public class MusicDatabaseConnector {
     private static String url = "jdbc:mysql://localhost:3306/D5";
     private static String username = "lioninn";
     private static String password = "Shamb00m!";
 
-    public static void buttonPress(MenuButtons button) {
-        Connection conn;
-        Statement statement;
-        ResultSet rs;
+    /**
+     * generates ResultSets for responses to menu button presses
+     * @param button the menu button pressed
+     */
+    public static void menuButtonPress(MenuButtons button) {
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet rs = null;
         ResultSet primaryKeys = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -66,14 +76,20 @@ public class MusicDatabaseConnector {
                     OptionPanel.setComboBox(primaryKeys);
                 }
             };
-
-
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             System.err.println("Driver not found");
+        } finally {
+            try {
+                Objects.requireNonNull(rs).close();
+                Objects.requireNonNull(primaryKeys).close();
+                statement.close();
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println("Issue closing resources");
+            }
+
         }
     }
 

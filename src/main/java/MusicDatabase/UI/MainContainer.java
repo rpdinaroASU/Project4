@@ -42,7 +42,6 @@ public class MainContainer {
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
 
-        //TODO:CODE SPAGHETTI
         //Set Menu Dimensions and add to container
         int menuSectionWidth = frame.getWidth()/ MENU_WIDTH_DIVISOR;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -52,7 +51,6 @@ public class MainContainer {
         MenuPanel menuPanel = MenuPanel.getInstance();
         menuPanel.getPanel().setPreferredSize(menuDimension);
         contentPane.add(MenuPanel.getInstance().getPanel());
-        //END TODO
 
         JPanel contextOptionPanel = new JPanel();
         contextOptionPanel.setLayout(new BoxLayout(contextOptionPanel, BoxLayout.Y_AXIS));
@@ -89,7 +87,7 @@ public class MainContainer {
         frame.setVisible(true);
 
 
-        MusicDatabaseConnector.buttonPress(MenuButtons.Albums);
+        MusicDatabaseConnector.menuButtonPress(MenuButtons.Albums);
     }
 
     /**

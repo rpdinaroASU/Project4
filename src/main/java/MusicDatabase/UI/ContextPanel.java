@@ -19,7 +19,6 @@ public class ContextPanel extends SectionPanel {
     private static JTable contextTable;
     private static Dimension contextTableSize;
     private static JScrollPane scrollPane;
-    private static ResultSet resultSet;
     private static JPanel contextPanel;
     private static Font eFont;
 
@@ -47,10 +46,11 @@ public class ContextPanel extends SectionPanel {
         return contextPanelInstance;
     }
 
-    public static ResultSet getResultSet() {
-        return resultSet;
-    }
-
+    /**
+     * Fills context table with results from ResultSet
+     * @param resultSet a result set from query
+     * @throws SQLException pointer issues
+     */
     public static void setContextTable(ResultSet resultSet) throws SQLException {
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         int columns = resultSetMetaData.getColumnCount();
@@ -83,6 +83,10 @@ public class ContextPanel extends SectionPanel {
         }
     }
 
+    /**
+     * Builds panel once after context panel is initialized
+     * @param panelDimension dimensions of the panel
+     */
     @Override
     public void buildPanel(Dimension panelDimension) {
         if(contextTable==null) {

@@ -37,6 +37,10 @@ public class MenuPanel extends SectionPanel{
     }
 
 
+    /**
+     * Constructs the panel when called after initialization
+     * @param panelDimension dimensions of the panel
+     */
     @Override
     public void buildPanel(Dimension panelDimension) {
         if (!built) {
@@ -65,7 +69,7 @@ public class MenuPanel extends SectionPanel{
             JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             labelPanel.setMaximumSize(new Dimension(150, 150));
             JLabel label = new JLabel("Menu");
-            label.setFont(new Font("Algerian", Font.BOLD, 50));
+            label.setFont(headerFont);
             labelPanel.add(label);
 
             panel.add(labelPanel);
