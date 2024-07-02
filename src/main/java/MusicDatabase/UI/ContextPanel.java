@@ -19,8 +19,8 @@ public class ContextPanel extends SectionPanel {
     private static JTable contextTable;
     private static Dimension contextTableSize;
     private static JScrollPane scrollPane;
-    private static ResultSet resultSet;
     private static JPanel contextPanel;
+    private static Font eFont;
 
     /**
      * Singleton of the context panel
@@ -29,6 +29,7 @@ public class ContextPanel extends SectionPanel {
         super();
         panel.setBackground(mainColor);
         panel.setLayout(new BorderLayout());
+        eFont = entryFont;
 
         //TODO: CREATE CONTEXT PANEL
     }
@@ -45,10 +46,11 @@ public class ContextPanel extends SectionPanel {
         return contextPanelInstance;
     }
 
-    public static ResultSet getResultSet() {
-        return resultSet;
-    }
-
+    /**
+     * Fills context table with results from ResultSet
+     * @param resultSet a result set from query
+     * @throws SQLException pointer issues
+     */
     public static void setContextTable(ResultSet resultSet) throws SQLException {
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         int columns = resultSetMetaData.getColumnCount();
@@ -70,11 +72,10 @@ public class ContextPanel extends SectionPanel {
         contextTable.getTableHeader().setFont(new Font("Times new Roman", Font.BOLD, 25));
         contextTable.setPreferredScrollableViewportSize(new Dimension(contextTableSize.width*3/4, contextTableSize.height*3/4));
         contextTable.updateUI();
-        Font entryFont = new Font("Times new Roman", Font.PLAIN, 20);
-        contextTable.setFont(entryFont);
+        contextTable.setFont(eFont);
 
         final int rowPadding = 20;
-        int rowHeight = contextPanel.getFontMetrics(entryFont).getHeight() + rowPadding;
+        int rowHeight = contextPanel.getFontMetrics(eFont).getHeight() + rowPadding;
         contextTable.setRowHeight(rowHeight);
 
         if (scrollPane != null) {
@@ -82,6 +83,10 @@ public class ContextPanel extends SectionPanel {
         }
     }
 
+    /**
+     * Builds panel once after context panel is initialized
+     * @param panelDimension dimensions of the panel
+     */
     @Override
     public void buildPanel(Dimension panelDimension) {
         if(contextTable==null) {
