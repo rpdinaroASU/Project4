@@ -12,9 +12,9 @@ import java.util.Objects;
  * @verion 1.0.0
  */
 public class MusicDatabaseConnector {
-    private static String url = "jdbc:mysql://localhost:3306/D5";
-    private static String username = "lioninn";
-    private static String password = "Shamb00m!";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/jdbclab";
+    private static String username = "root";
+    private static String password = "671b669E";
 
     /**
      * generates ResultSets for responses to menu button presses
@@ -92,5 +92,18 @@ public class MusicDatabaseConnector {
 
         }
     }
+
+	public static String getUrl() {
+        return url;
+
+	}
+
+	public static String getUsername() {
+        return username;
+	}
+
+	public static String getPassword() {
+        return password;
+	}
 
 }
