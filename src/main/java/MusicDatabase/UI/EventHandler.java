@@ -62,62 +62,226 @@ public class EventHandler {
 
         String tableName = "";
         String primaryKey = "";
-
+        String jonTable = "";
+        String deleteScript = "";
+        
         switch (currentMenu) {
             case Songs -> {
                 tableName = "SONG";
                 primaryKey = "SongID";
+                handleJoinDelete("song_contributor",primaryKey,pkSelection);
+                handleJoinDelete("SONG_GENRE",primaryKey,pkSelection);
+                handleJoinDelete("SONG_PLAYLIST",primaryKey,pkSelection);
             }
             case Albums -> {
-                tableName = "ALBUM";
-                primaryKey = "AlbumID";
+             	deleteScript =  "-- Delete from song_contributor\n"
+            	        + "DELETE sc\n"
+            	        + "FROM song_contributor sc\n"
+            	        + "INNER JOIN song s ON sc.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.albumid = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song_genre\n"
+            	        + "DELETE sg\n"
+            	        + "FROM song_genre sg\n"
+            	        + "INNER JOIN song s ON sg.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.albumid = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song_playlist\n"
+            	        + "DELETE sp\n"
+            	        + "FROM song_playlist sp\n"
+            	        + "INNER JOIN song s ON sp.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.albumid = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song\n"
+            	        + "DELETE s\n"
+            	        + "FROM song s\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.albumid = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from record_label\n"
+            	        + "DELETE FROM record_label WHERE LabelName = ?;\n"
+            	        + "-- Delete from album\n"
+            	        + "DELETE s\n"
+            	        + "FROM album s\n"
+            	        + "WHERE albumid = ?;\n"
+            	        + "\n";
             }
             case RecordLabels -> {
-                tableName = "RECORD_LABEL";
-                primaryKey = "LabelName";
+            	deleteScript =  "-- Delete from song_contributor\n"
+            	        + "DELETE sc\n"
+            	        + "FROM song_contributor sc\n"
+            	        + "INNER JOIN song s ON sc.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.LabelName = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song_genre\n"
+            	        + "DELETE sg\n"
+            	        + "FROM song_genre sg\n"
+            	        + "INNER JOIN song s ON sg.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.LabelName = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song_playlist\n"
+            	        + "DELETE sp\n"
+            	        + "FROM song_playlist sp\n"
+            	        + "INNER JOIN song s ON sp.SongID = s.SongID\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.LabelName = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from song\n"
+            	        + "DELETE s\n"
+            	        + "FROM song s\n"
+            	        + "INNER JOIN album a ON s.AlbumID = a.AlbumID\n"
+            	        + "WHERE a.LabelName = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from album\n"
+            	        + "DELETE s\n"
+            	        + "FROM album s\n"
+            	        + "WHERE LabelName = ?;\n"
+            	        + "\n"
+            	        + "-- Delete from record_label\n"
+            	        + "DELETE FROM record_label WHERE LabelName = ?;\n";
+            	
+                
             }
             case Genres -> {
                 tableName = "GENRE";
                 primaryKey = "GenreID";
+                jonTable = "SONG_GENRE";
             }
             case Contributors -> {
                 tableName = "CONTRIBUTOR";
                 primaryKey = "ContributorID";
+                jonTable = "song_contributor";
             }
             case Playlists -> {
                 tableName = "PLAYLIST";
                 primaryKey = "PLID";
+                jonTable = "SONG_PLAYLIST";
             }
             default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
         }
+        
+        if (jonTable != "") {
+        	handleJoinDelete(jonTable,primaryKey,pkSelection);
+        }
 
-        String deleteSQL = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = ?";
+        if(tableName != "") {
+        	handleBasicDelete(tableName, primaryKey, pkSelection, currentMenu);
+        }
+    
+        if(deleteScript != "") {
+        	handleAdvancedDelete(deleteScript,pkSelection,currentMenu);
+        }
+}
+    
+    /**
+     * This handles the table deletes that require an advance delete script
+     * @param deleteScript
+     * @param pkSelection
+     * @param currentMenu
+     */
+    private static void handleAdvancedDelete(String deleteScript, String pkSelection, MenuButtons currentMenu ) {
 
-        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
-             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+        String[] deleteStatements = deleteScript.split(";\n");
 
-            pstmt.setString(1, pkSelection);
-            int rowsAffected = pstmt.executeUpdate();
-            
-            if (rowsAffected > 0) {
-            	
-                System.out.println("Record deleted successfully.");
-                MusicDatabaseConnector.menuButtonPress(currentMenu);
-                
-            } else {
-            	
-                System.out.println("No record found with the provided primary key.");
-                String message = "ERROR : Please select a record key in drop down.";
-                JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword())) {
+
+            for (String statement : deleteStatements) {
+
+                if (statement.trim().isEmpty()) {
+                    continue;
+                }
+
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                    pstmt.setString(1, pkSelection);
+                    int rowsAffected = pstmt.executeUpdate();
+
+                    if (rowsAffected > 0) {
+                        System.out.println("Record deleted successfully.");
+                        MusicDatabaseConnector.menuButtonPress(currentMenu);
+                    } 
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            String message = "ERROR : There are other refrences to this table. Delete the other refrences before deleting this.";
+            String message = "ERROR : There are other references to this table. Delete the other references before deleting this.";
             JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
     
-}
+    /**
+     * This will handle basic deletes. 
+     * @param tableName
+     * @param primaryKey
+     * @param pkSelection
+     * @param currentMenu
+     */
+	private static void handleBasicDelete(String tableName, String primaryKey, String pkSelection, MenuButtons currentMenu ) {
+    
+    String deleteSQL = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = ?";
+
+    try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
+         PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+
+        pstmt.setString(1, pkSelection);
+        int rowsAffected = pstmt.executeUpdate();
+        
+        if (rowsAffected > 0) {
+        	
+            System.out.println("Record deleted successfully.");
+            MusicDatabaseConnector.menuButtonPress(currentMenu);
+            
+        } else {
+        	
+            System.out.println("No record found with the provided primary key.");
+            String message = "ERROR : Please select a record key in drop down.";
+            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        String message = "ERROR : There are other refrences to this table. Delete the other refrences before deleting this.";
+        JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+    }
+	}
+
+    /**
+     * This handles the deletes to referenced tables.
+     * @param jonTable
+     * @param primaryKey
+     * @param pkSelection
+     */
+	private static void handleJoinDelete(String jonTable, String primaryKey, String pkSelection) {
+		
+		   String deleteSQL = "DELETE FROM " + jonTable + " WHERE " + primaryKey + " = ?";
+
+	        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
+	             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+
+	            pstmt.setString(1, pkSelection);
+	            int rowsAffected = pstmt.executeUpdate();
+	            
+	            if (rowsAffected > 0) {
+	            	
+	                System.out.println("Record deleted successfully.");
+	                
+	            }
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            String message = "ERROR :  Cannot delete Jon item. There are other refrences to this table. "
+	            		+ "Delete the other refrences before deleting this.";
+	            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+	        }
+		
+	}
 
 
 }
