@@ -12,9 +12,9 @@ import java.util.Objects;
  * @verion 1.0.0
  */
 public class MusicDatabaseConnector {
-    private static String url = "jdbc:mysql://127.0.0.1:3306/jdbclab";
-    private static String username = "root";
-    private static String password = "671b669E";
+    private static String url = System.getProperty("db.url");
+    private static String username = System.getProperty("db.username");
+    private static String password = System.getProperty("db.password");
 
     /**
      * generates ResultSets for responses to menu button presses

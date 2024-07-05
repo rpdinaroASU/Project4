@@ -10,10 +10,14 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
 }
 application {
-    mainClass = 'MusicDatabase.Utilities.Main'
+    mainClassName = 'MusicDatabase.Utilities.Main'
 }
 
 task start(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = application.mainClass
+    main = application.mainClassName
+    systemProperty 'db.url', 'jdbc:mysql://127.0.0.1:3306/jdbclab'
+    systemProperty 'db.username', 'root'
+    systemProperty 'db.password', 'password'
 }
+
