@@ -16,7 +16,7 @@ public class OptionPanel extends SectionPanel {
     private static OptionPanel optionPanelInstance;
     private static JComboBox<String> comboBox;
     private static boolean built = false;
-    private static MenuButtons currentMenu;
+    private static ButtonInterface currentMenu;
     /**
      * This constructor initializes the panel and sets styling and layout
      */
@@ -110,7 +110,7 @@ public class OptionPanel extends SectionPanel {
      * Sets the menu button pressed to be used for remove switch. 
      * @param button
      */
-	public static void setCurrentMenu(MenuButtons button) {
+	public static void setCurrentMenu(ButtonInterface button) {
 		 currentMenu = button;
 		
 	}
@@ -119,7 +119,7 @@ public class OptionPanel extends SectionPanel {
 	 * Returns the current menu selection.
 	 * @return
 	 */
-    public static MenuButtons getCurrentMenu() {
+    public static ButtonInterface getCurrentMenu() {
         return currentMenu;
     }
 }

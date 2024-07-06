@@ -23,8 +23,8 @@ public class EventHandler {
      */
     public static void handleMenuButtonEvent(ButtonInterface button) {
         OptionPanel.notifyMenuButtonPress();
-        MusicDatabaseConnector.menuButtonPress((MenuButtons) button);
-        OptionPanel.setCurrentMenu((MenuButtons) button);
+        MusicDatabaseConnector.menuButtonPress(button);
+        OptionPanel.setCurrentMenu(button);
     }
 
     /**
@@ -39,7 +39,7 @@ public class EventHandler {
         else if(optionButton == OptionButtons.Remove) {
         	
             String pkSelection = OptionPanel.getComboBoxSelection();
-            MenuButtons currentMenu = OptionPanel.getCurrentMenu();
+            MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
             removeRecord(currentMenu, pkSelection);
             
         }
@@ -48,7 +48,7 @@ public class EventHandler {
             //Retrieve a String representation of the primary keys of the table delimited by `,`
         }
         else if(optionButton == OptionButtons.Filter) {
-
+            FiltersFrame.getInstance();
         }
     }
     
