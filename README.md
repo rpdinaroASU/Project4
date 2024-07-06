@@ -3,3 +3,6 @@ Before launching please configure your database URL, username and password in th
 To launch call 
 `gradle build`
 `gradle start`
+
+Java 18
+Gradle 7.4.2
