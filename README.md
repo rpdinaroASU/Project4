@@ -6,3 +6,6 @@ To launch call
 
 Java 18
 Gradle 7.4.2
+
+Individual Contributions 
+Zoe Shortman - Remove record logic / Login configurations moved to build.gradle file.
