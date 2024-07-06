@@ -13,4 +13,6 @@ Load our database using the sql files with PD3_G8_SUM24_create then PD3_G8_SUM24
 
 Individual Contributions 
 Zoe Shortman - Remove record logic / Login configurations moved to build.gradle file.
-
+Ryan Dinaro - Majority of the UI functionality besides ADD,REMOVE,EDIT/UPDATE,FILTER
+Zac Barlow - EDIT/UPDATE functionality(nearly fuctional)
+Ethan Robinson - FILTER fucntionality
