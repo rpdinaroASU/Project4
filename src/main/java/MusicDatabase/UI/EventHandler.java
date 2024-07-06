@@ -33,20 +33,21 @@ public class EventHandler {
      * @param optionButton the option button pressed
      */
     public static void handleOptionButtonEvent(ButtonInterface optionButton) {
-        //TODO: HANDLE INSERTS (ADD), UPDATES(EDIT), DELETIONS(REMOVE), AND ADDITIONAL SELECTION OPTIONS(FILTER)
+        //TODO: HANDLE INSERTS (ADD), UPDATES(EDIT)
         if(optionButton == OptionButtons.Add) {
 
         }
         else if(optionButton == OptionButtons.Remove) {
-        	
             String pkSelection = OptionPanel.getComboBoxSelection();
             MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
             removeRecord(currentMenu, pkSelection);
-            
         }
-        else if(optionButton == OptionButtons.Edit) {
+        else if(optionButton == OptionButtons.Update) {
             String pkSelection = OptionPanel.getComboBoxSelection();
             //Retrieve a String representation of the primary keys of the table delimited by `,`
+            MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
+            editRecord(currentMenu, pkSelection);
+            System.out.println(pkSelection);
         }
         else if(optionButton == OptionButtons.Filter) {
             FiltersFrame.getInstance();
@@ -63,7 +64,7 @@ public class EventHandler {
 
         String tableName = "";
         String primaryKey = "";
-        String jonTable = "";
+        String joinTable = "";
         String deleteScript = "";
         
         switch (currentMenu) {
@@ -151,24 +152,24 @@ public class EventHandler {
             case Genres -> {
                 tableName = "GENRE";
                 primaryKey = "GenreID";
-                jonTable = "SONG_GENRE";
+                joinTable = "SONG_GENRE";
             }
             case Contributors -> {
                 tableName = "CONTRIBUTOR";
                 primaryKey = "ContributorID";
-                jonTable = "song_contributor";
+                joinTable = "song_contributor";
             }
             case Playlists -> {
                 tableName = "PLAYLIST";
                 primaryKey = "PLID";
-                jonTable = "SONG_PLAYLIST";
+                joinTable = "SONG_PLAYLIST";
             }
             default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
         }
 
         
-        if (jonTable != "") {
-        	handleJoinDelete(jonTable,primaryKey,pkSelection);
+        if (joinTable != "") {
+        	handleJoinDelete(joinTable,primaryKey,pkSelection);
         }
 
         if(tableName != "") {
@@ -219,12 +220,7 @@ public class EventHandler {
             JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
 
-  
-    
-    
-    
     /**
      * This will handle basic deletes. 
      * @param tableName
@@ -286,12 +282,90 @@ public class EventHandler {
 
 	        } catch (SQLException e) {
 	            e.printStackTrace();
-	            String message = "ERROR :  Cannot delete Jon item. There are other refrences to this table. "
+	            String message = "ERROR :  Cannot delete Jon item. There are other references to this table. "
 	            		+ "Delete the other refrences before deleting this.";
 	            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
 	        }
 		
 	}
 
+    private static void editRecord(MenuButtons currentMenu, String pkSelection) {
+        String tableName = "";
+        String primaryKey = "";
+        String[] colNames = null;
+
+        switch (currentMenu) {
+            case Songs -> {
+                tableName = "SONG";
+                primaryKey = "SongID";
+                colNames= new String[]{"ReleaseDate", "Title", "AlbumID"};
+            }
+            case Albums -> {
+                tableName = "ALBUM";
+                primaryKey = "AlbumID";
+                colNames= new String[]{"AlbumName"};
+            }
+            case RecordLabels -> {
+                tableName = "RECORD_LABEL";
+                primaryKey = "Label_ID";
+                colNames= new String[]{"LabelName", "Address", "Phone"};
+            }
+            case Genres -> {
+                tableName = "GENRE";
+                primaryKey = "GenreID";
+                colNames= new String[]{"GenreName"};
+            }
+            case Contributors -> {
+                tableName = "CONTRIBUTOR";
+                primaryKey = "ContributorID";
+                colNames= new String[]{"FirstName", "LastName", "DOB"};
+            }
+            case Playlists -> {
+                tableName = "PLAYLIST";
+                primaryKey = "PLID";
+                colNames= new String[]{"PlaylistName", "CreatorName", "DateCreated"};
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
+        }
+        handleEdit(tableName, primaryKey, pkSelection, currentMenu,colNames);
+    }
+
+    private static void handleEdit(String tableName, String primaryKey, String pkSelection, MenuButtons currentMenu,
+                                   String[] colNames){
+        int i = 0;
+        StringBuilder editSQLsb = new StringBuilder("UPDATE " + tableName + " SET ");
+        while(i < colNames.length){
+            if(i>0){editSQLsb.append(",");}
+            editSQLsb.append(colNames[i]);
+            i++;
+        }
+        editSQLsb.append(" WHERE " + primaryKey + " = ?");
+        String editSQL = editSQLsb.toString();
+
+        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
+             PreparedStatement pstmt = conn.prepareStatement(editSQL)) {
+
+            pstmt.setString(1, pkSelection);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+
+                System.out.println("Record deleted successfully.");
+                OptionPanel.notifyMenuButtonPress();
+                MusicDatabaseConnector.menuButtonPress(currentMenu);
+
+            } else {
+
+                System.out.println("No record found with the provided primary key.");
+                String message = "ERROR : Please select a record key in drop down.";
+                JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            String message = "ERROR : There are other refrences to this table. Delete the other refrences before deleting this.";
+            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
 }

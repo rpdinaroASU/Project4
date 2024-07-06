@@ -112,7 +112,6 @@ public class OptionPanel extends SectionPanel {
      */
 	public static void setCurrentMenu(ButtonInterface button) {
 		 currentMenu = button;
-		
 	}
 
 	/**
