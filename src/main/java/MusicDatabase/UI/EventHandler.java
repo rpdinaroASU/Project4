@@ -3,6 +3,7 @@ package MusicDatabase.UI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -203,7 +204,10 @@ public class EventHandler {
 
                     if (rowsAffected > 0) {
                         System.out.println("Record deleted successfully.");
+                        OptionPanel.notifyMenuButtonPress();
                         MusicDatabaseConnector.menuButtonPress(currentMenu);
+                        
+                      
                     } 
                 }
             }
@@ -214,7 +218,11 @@ public class EventHandler {
             JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+    
 
+  
+    
+    
     
     /**
      * This will handle basic deletes. 
@@ -236,6 +244,7 @@ public class EventHandler {
         if (rowsAffected > 0) {
         	
             System.out.println("Record deleted successfully.");
+            OptionPanel.notifyMenuButtonPress();
             MusicDatabaseConnector.menuButtonPress(currentMenu);
             
         } else {
