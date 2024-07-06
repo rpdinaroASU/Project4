@@ -4,7 +4,7 @@ package MusicDatabase.UI;
  * Buttons in the optionPane
  */
 public enum OptionButtons implements ButtonInterface {
-    Update,
+    Edit,
     Add,
     Remove,
     Filter;

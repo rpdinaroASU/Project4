@@ -1,10 +1,7 @@
 package MusicDatabase.UI;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -42,17 +39,17 @@ public class EventHandler {
             MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
             removeRecord(currentMenu, pkSelection);
         }
-        else if(optionButton == OptionButtons.Update) {
+        else if(optionButton == OptionButtons.Edit) {
             String pkSelection = OptionPanel.getComboBoxSelection();
             //Retrieve a String representation of the primary keys of the table delimited by `,`
             MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
-            editRecord(currentMenu, pkSelection);
-            System.out.println(pkSelection);
+            MusicDatabaseConnector.editButtonPress(OptionButtons.Edit,currentMenu,pkSelection);
         }
         else if(optionButton == OptionButtons.Filter) {
             FiltersFrame.getInstance();
         }
     }
+
     
     /**
      * This method will remove the chosen PK associated with a table and refresh if successful.
@@ -208,8 +205,7 @@ public class EventHandler {
                         System.out.println("Record deleted successfully.");
                         OptionPanel.notifyMenuButtonPress();
                         MusicDatabaseConnector.menuButtonPress(currentMenu);
-                        
-                      
+
                     } 
                 }
             }
@@ -289,83 +285,11 @@ public class EventHandler {
 		
 	}
 
-    private static void editRecord(MenuButtons currentMenu, String pkSelection) {
-        String tableName = "";
-        String primaryKey = "";
-        String[] colNames = null;
+    /**
+     * This method will update the chosen record after accepting an input from a JtextArea in a new frame
+     * @param currentMenu
+     * @param pkSelection
+     */
 
-        switch (currentMenu) {
-            case Songs -> {
-                tableName = "SONG";
-                primaryKey = "SongID";
-                colNames= new String[]{"ReleaseDate", "Title", "AlbumID"};
-            }
-            case Albums -> {
-                tableName = "ALBUM";
-                primaryKey = "AlbumID";
-                colNames= new String[]{"AlbumName"};
-            }
-            case RecordLabels -> {
-                tableName = "RECORD_LABEL";
-                primaryKey = "Label_ID";
-                colNames= new String[]{"LabelName", "Address", "Phone"};
-            }
-            case Genres -> {
-                tableName = "GENRE";
-                primaryKey = "GenreID";
-                colNames= new String[]{"GenreName"};
-            }
-            case Contributors -> {
-                tableName = "CONTRIBUTOR";
-                primaryKey = "ContributorID";
-                colNames= new String[]{"FirstName", "LastName", "DOB"};
-            }
-            case Playlists -> {
-                tableName = "PLAYLIST";
-                primaryKey = "PLID";
-                colNames= new String[]{"PlaylistName", "CreatorName", "DateCreated"};
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
-        }
-        handleEdit(tableName, primaryKey, pkSelection, currentMenu,colNames);
-    }
-
-    private static void handleEdit(String tableName, String primaryKey, String pkSelection, MenuButtons currentMenu,
-                                   String[] colNames){
-        int i = 0;
-        StringBuilder editSQLsb = new StringBuilder("UPDATE " + tableName + " SET ");
-        while(i < colNames.length){
-            if(i>0){editSQLsb.append(",");}
-            editSQLsb.append(colNames[i]);
-            i++;
-        }
-        editSQLsb.append(" WHERE " + primaryKey + " = ?");
-        String editSQL = editSQLsb.toString();
-
-        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
-             PreparedStatement pstmt = conn.prepareStatement(editSQL)) {
-
-            pstmt.setString(1, pkSelection);
-            int rowsAffected = pstmt.executeUpdate();
-
-            if (rowsAffected > 0) {
-
-                System.out.println("Record deleted successfully.");
-                OptionPanel.notifyMenuButtonPress();
-                MusicDatabaseConnector.menuButtonPress(currentMenu);
-
-            } else {
-
-                System.out.println("No record found with the provided primary key.");
-                String message = "ERROR : Please select a record key in drop down.";
-                JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            String message = "ERROR : There are other refrences to this table. Delete the other refrences before deleting this.";
-            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
 
 }
