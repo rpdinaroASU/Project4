@@ -42,7 +42,7 @@ public class MenuPanel extends SectionPanel{
      * @param panelDimension dimensions of the panel
      */
     @Override
-    public void buildPanel(Dimension panelDimension) {
+    public void buildPanel(Dimension panelDimension, ButtonInterface[] buttonGroup) {
         if (!built) {
             built = true;
             final int panelWidth = (int) panelDimension.getWidth();
@@ -52,8 +52,8 @@ public class MenuPanel extends SectionPanel{
             buttonPanel.setMaximumSize(new Dimension(panelWidth * 3 / 4, 56 * MenuButtons.values().length));
 
 
-            for (MenuButtons menuButton : MenuButtons.values()) {
-                JButton button = new JButton(menuButton.getButtonName());
+            for (ButtonInterface menuButton : buttonGroup) {
+                JButton button = new JButton(menuButton.getName());
                 button.setFont(buttonFont);
                 button.addActionListener(e -> {
                     EventHandler.handleMenuButtonEvent(menuButton);

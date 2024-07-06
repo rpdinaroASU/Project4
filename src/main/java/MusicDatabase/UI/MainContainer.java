@@ -47,7 +47,7 @@ public class MainContainer {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int screenHeight = (int) toolkit.getScreenSize().getHeight();
         Dimension menuDimension = new Dimension(menuSectionWidth,screenHeight);
-        MenuPanel.getInstance().buildPanel(menuDimension);
+        MenuPanel.getInstance().buildPanel(menuDimension,MenuButtons.values());
         MenuPanel menuPanel = MenuPanel.getInstance();
         menuPanel.getPanel().setPreferredSize(menuDimension);
         contentPane.add(MenuPanel.getInstance().getPanel());
@@ -60,12 +60,12 @@ public class MainContainer {
         OptionPanel optionPanel = OptionPanel.getInstance();
         optionPanel.getPanel().setPreferredSize(
                 new Dimension(frame.getWidth(),frame.getHeight()/4));
-        optionPanel.buildPanel(optionPanel.getPanel().getPreferredSize());
+        optionPanel.buildPanel(optionPanel.getPanel().getPreferredSize(), OptionButtons.values());
 
         ContextPanel contextPanel = ContextPanel.getInstance();
         contextPanel.getPanel().setPreferredSize(
                 new Dimension(frame.getWidth(),frame.getHeight()*3/4));
-        contextPanel.buildPanel(contextPanel.getPanel().getPreferredSize());
+        contextPanel.buildPanel(contextPanel.getPanel().getPreferredSize(),null);
 
         contextOptionPanel.add(optionPanel.getPanel());
         contextOptionPanel.add(contextPanel.getPanel());

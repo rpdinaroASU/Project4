@@ -59,7 +59,7 @@ public class OptionPanel extends SectionPanel {
      * @param panelDimension dimensions of the panel
      */
     @Override
-    public void buildPanel(Dimension panelDimension) {
+    public void buildPanel(Dimension panelDimension, ButtonInterface[] buttonInterfaces) {
         if(!built) {
             comboBox = new JComboBox<String>();
             comboBox.setPreferredSize(new Dimension(panelDimension.width / 2, panelDimension.height / 5));
@@ -73,8 +73,8 @@ public class OptionPanel extends SectionPanel {
             final int buttonSpacerDivisor = 10;
             panel.add(Box.createHorizontalStrut(panelDimension.height / buttonSpacerDivisor));
 
-            for (OptionButtons optionButtons : OptionButtons.values()) {
-                JButton button = new JButton(optionButtons.name());
+            for (ButtonInterface optionButtons : buttonInterfaces) {
+                JButton button = new JButton(optionButtons.getName());
                 button.setPreferredSize(new Dimension(panelDimension.width / 8, panelDimension.height / 5));
                 button.addActionListener(e -> {
                     EventHandler.handleOptionButtonEvent(optionButtons);
