@@ -42,5 +42,5 @@ public abstract class SectionPanel {
      * Constructs the panel when called after singleton initialization
      * @param panelDimension dimensions of the panel
      */
-    public abstract void buildPanel(Dimension panelDimension);
+    public abstract void buildPanel(Dimension panelDimension, ButtonInterface[] buttonGroup);
 }

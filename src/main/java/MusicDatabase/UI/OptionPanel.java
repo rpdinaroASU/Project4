@@ -16,7 +16,7 @@ public class OptionPanel extends SectionPanel {
     private static OptionPanel optionPanelInstance;
     private static JComboBox<String> comboBox;
     private static boolean built = false;
-    private static MenuButtons currentMenu;
+    private static ButtonInterface currentMenu;
     /**
      * This constructor initializes the panel and sets styling and layout
      */
@@ -59,7 +59,7 @@ public class OptionPanel extends SectionPanel {
      * @param panelDimension dimensions of the panel
      */
     @Override
-    public void buildPanel(Dimension panelDimension) {
+    public void buildPanel(Dimension panelDimension, ButtonInterface[] buttonInterfaces) {
         if(!built) {
             comboBox = new JComboBox<String>();
             comboBox.setPreferredSize(new Dimension(panelDimension.width / 2, panelDimension.height / 5));
@@ -73,8 +73,8 @@ public class OptionPanel extends SectionPanel {
             final int buttonSpacerDivisor = 10;
             panel.add(Box.createHorizontalStrut(panelDimension.height / buttonSpacerDivisor));
 
-            for (OptionButtons optionButtons : OptionButtons.values()) {
-                JButton button = new JButton(optionButtons.name());
+            for (ButtonInterface optionButtons : buttonInterfaces) {
+                JButton button = new JButton(optionButtons.getName());
                 button.setPreferredSize(new Dimension(panelDimension.width / 8, panelDimension.height / 5));
                 button.addActionListener(e -> {
                     EventHandler.handleOptionButtonEvent(optionButtons);
@@ -110,7 +110,7 @@ public class OptionPanel extends SectionPanel {
      * Sets the menu button pressed to be used for remove switch. 
      * @param button
      */
-	public static void setCurrentMenu(MenuButtons button) {
+	public static void setCurrentMenu(ButtonInterface button) {
 		 currentMenu = button;
 		
 	}
@@ -119,7 +119,7 @@ public class OptionPanel extends SectionPanel {
 	 * Returns the current menu selection.
 	 * @return
 	 */
-    public static MenuButtons getCurrentMenu() {
+    public static ButtonInterface getCurrentMenu() {
         return currentMenu;
     }
 }

@@ -1,4 +1,5 @@
 package MusicDatabase.JDBC;
+import MusicDatabase.UI.ButtonInterface;
 import MusicDatabase.UI.ContextPanel;
 import MusicDatabase.UI.MenuButtons;
 import MusicDatabase.UI.OptionPanel;
@@ -20,7 +21,7 @@ public class MusicDatabaseConnector {
      * generates ResultSets for responses to menu button presses
      * @param button the menu button pressed
      */
-    public static void menuButtonPress(MenuButtons button) {
+    public static void menuButtonPress(ButtonInterface button) {
         Connection conn = null;
         Statement statement = null;
         ResultSet rs = null;
@@ -32,50 +33,43 @@ public class MusicDatabaseConnector {
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             );
-            switch (button) {
-                case Songs -> {
-                    rs = statement.executeQuery("SELECT * FROM SONG");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT SongID FROM SONG");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                case Albums -> {
-                    rs = statement.executeQuery("SELECT * FROM ALBUM");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT AlbumID FROM ALBUM");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                case RecordLabels -> {
-                    rs = statement.executeQuery("SELECT * FROM RECORD_LABEL");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT LabelName FROM RECORD_LABEL");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                case Genres -> {
-                    rs = statement.executeQuery("SELECT * FROM GENRE");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT GenreID FROM GENRE");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                case Contributors -> {
-                    rs = statement.executeQuery("SELECT * FROM CONTRIBUTOR");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT ContributorID FROM CONTRIBUTOR");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                case Playlists -> {
-                    rs = statement.executeQuery("SELECT * FROM PLAYLIST");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT PLID FROM PLAYLIST");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-                default -> {
-                    rs = statement.executeQuery("SELECT * FROM SONG_CONTRIBUTOR");
-                    ContextPanel.setContextTable(rs);
-                    primaryKeys = statement.executeQuery("SELECT * FROM SONG_CONTRIBUTOR");
-                    OptionPanel.setComboBox(primaryKeys);
-                }
-            };
+            if (button.equals(MenuButtons.Songs)) {
+                rs = statement.executeQuery("SELECT * FROM SONG");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT SongID FROM SONG");
+                OptionPanel.setComboBox(primaryKeys);
+            } else if (button.equals(MenuButtons.Albums)) {
+                rs = statement.executeQuery("SELECT * FROM ALBUM");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT AlbumID FROM ALBUM");
+                OptionPanel.setComboBox(primaryKeys);
+            } else if (button.equals(MenuButtons.RecordLabels)) {
+                rs = statement.executeQuery("SELECT * FROM RECORD_LABEL");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT LabelName FROM RECORD_LABEL");
+                OptionPanel.setComboBox(primaryKeys);
+            } else if (button.equals(MenuButtons.Genres)) {
+                rs = statement.executeQuery("SELECT * FROM GENRE");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT GenreID FROM GENRE");
+                OptionPanel.setComboBox(primaryKeys);
+            } else if (button.equals(MenuButtons.Contributors)) {
+                rs = statement.executeQuery("SELECT * FROM CONTRIBUTOR");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT ContributorID FROM CONTRIBUTOR");
+                OptionPanel.setComboBox(primaryKeys);
+            } else if (button.equals(MenuButtons.Playlists)) {
+                rs = statement.executeQuery("SELECT * FROM PLAYLIST");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT PLID FROM PLAYLIST");
+                OptionPanel.setComboBox(primaryKeys);
+            } else {
+                rs = statement.executeQuery("SELECT * FROM SONG_CONTRIBUTOR");
+                ContextPanel.setContextTable(rs);
+                primaryKeys = statement.executeQuery("SELECT * FROM SONG_CONTRIBUTOR");
+                OptionPanel.setComboBox(primaryKeys);
+            }
+            ;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

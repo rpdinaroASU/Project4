@@ -1,6 +1,6 @@
 package MusicDatabase.UI;
 
-public enum MenuButtons {
+public enum MenuButtons implements ButtonInterface {
     RecordLabels("Record Labels") , Albums("Albums"), Songs("Songs"),
     Genres("Genres"), Contributors("Contributors"),
     Playlists("Playlists");
@@ -10,7 +10,7 @@ public enum MenuButtons {
         name = s;
     }
 
-    public String getButtonName() {
+    public String getName() {
         return name;
     }
 }

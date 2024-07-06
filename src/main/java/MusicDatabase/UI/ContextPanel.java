@@ -88,7 +88,7 @@ public class ContextPanel extends SectionPanel {
      * @param panelDimension dimensions of the panel
      */
     @Override
-    public void buildPanel(Dimension panelDimension) {
+    public void buildPanel(Dimension panelDimension, ButtonInterface[] buttonGroup) {
         if(contextTable==null) {
             contextTable = new JTable();
             contextTableSize = panelDimension;

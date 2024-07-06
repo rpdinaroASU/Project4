@@ -16,8 +16,8 @@ application {
 task start(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = application.mainClassName
-    systemProperty 'db.url', 'jdbc:mysql://127.0.0.1:3306/jdbclab'
-    systemProperty 'db.username', 'root'
-    systemProperty 'db.password', 'password'
+    systemProperty 'db.url', 'jdbc:mysql://127.0.0.1:3306/D5'
+    systemProperty 'db.username', 'lioninn'
+    systemProperty 'db.password', 'Shamb00m!'
 }
 

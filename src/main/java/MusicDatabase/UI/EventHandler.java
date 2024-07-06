@@ -22,7 +22,7 @@ public class EventHandler {
      * This method handles MenuPanel Button presses and switches the context panel accordingly
      * @param button the button pressed
      */
-    public static void handleMenuButtonEvent(MenuButtons button) {
+    public static void handleMenuButtonEvent(ButtonInterface button) {
         OptionPanel.notifyMenuButtonPress();
         MusicDatabaseConnector.menuButtonPress(button);
         OptionPanel.setCurrentMenu(button);
@@ -32,7 +32,7 @@ public class EventHandler {
      * This method handles option panel button presses and interacts with the database accordingly
      * @param optionButton the option button pressed
      */
-    public static void handleOptionButtonEvent(OptionButtons optionButton) {
+    public static void handleOptionButtonEvent(ButtonInterface optionButton) {
         //TODO: HANDLE INSERTS (ADD), UPDATES(EDIT), DELETIONS(REMOVE), AND ADDITIONAL SELECTION OPTIONS(FILTER)
         if(optionButton == OptionButtons.Add) {
 
@@ -40,7 +40,7 @@ public class EventHandler {
         else if(optionButton == OptionButtons.Remove) {
         	
             String pkSelection = OptionPanel.getComboBoxSelection();
-            MenuButtons currentMenu = OptionPanel.getCurrentMenu();
+            MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
             removeRecord(currentMenu, pkSelection);
             
         }
@@ -49,7 +49,7 @@ public class EventHandler {
             //Retrieve a String representation of the primary keys of the table delimited by `,`
         }
         else if(optionButton == OptionButtons.Filter) {
-
+            FiltersFrame.getInstance();
         }
     }
     
@@ -165,6 +165,7 @@ public class EventHandler {
             }
             default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
         }
+
         
         if (jonTable != "") {
         	handleJoinDelete(jonTable,primaryKey,pkSelection);
