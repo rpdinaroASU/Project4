@@ -43,7 +43,6 @@ public class EditFrame {
     }
     public static String[] getjText(){
     String[] textj = jText.split(",");
-
         return textj;
     }
 

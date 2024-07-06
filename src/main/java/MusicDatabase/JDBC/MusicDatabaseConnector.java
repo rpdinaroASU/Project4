@@ -84,6 +84,26 @@ public class MusicDatabaseConnector {
 
         }
     }
+    public static ResultSet executeFilterQuery(String query, String filterValue) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, username, password);
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, filterValue);
+            rs = pstmt.executeQuery();
+        } catch (SQLException var6) {
+            var6.printStackTrace();
+            throw new RuntimeException(var6);
+        } catch (ClassNotFoundException var7) {
+            System.err.println("Driver not found");
+        }
+
+        return rs;
+    }
     public static void editButtonPress(ButtonInterface button, MenuButtons currentMenu, String pkSelection) {
         Connection conn = null;
         Statement statement = null;
@@ -275,7 +295,6 @@ public class MusicDatabaseConnector {
             JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
 
 	public static String getUrl() {
         return url;

@@ -1,5 +1,6 @@
 package MusicDatabase.UI;
 
+import java.awt.*;
 import java.sql.*;
 import java.util.Arrays;
 
@@ -41,7 +42,6 @@ public class EventHandler {
         }
         else if(optionButton == OptionButtons.Edit) {
             String pkSelection = OptionPanel.getComboBoxSelection();
-            //Retrieve a String representation of the primary keys of the table delimited by `,`
             MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
             MusicDatabaseConnector.editButtonPress(OptionButtons.Edit,currentMenu,pkSelection);
         }
@@ -50,7 +50,36 @@ public class EventHandler {
         }
     }
 
-    
+    public static void handleFilterButtonEvent(FilterButtons filterButton) {
+        String query = "";
+        String parameter = "";
+        switch (filterButton) {
+            case SONGS_BY_GENRE:
+                query = "SELECT s.* FROM SONG s INNER JOIN SONG_GENRE sg ON s.SongID = sg.SongID WHERE sg.GenreID = ?";
+                parameter = "GenreID";
+                break;
+            case SONGS_BY_ALBUM:
+                query = "SELECT * FROM SONG WHERE AlbumID = ?";
+                parameter = "AlbumID";
+                break;
+            case SONGS_BY_PLAYLIST:
+                query = "SELECT s.* FROM SONG s INNER JOIN SONG_PLAYLIST sp ON s.SongID = sp.SongID WHERE sp.PLID = ?";
+                parameter = "PLID";
+        }
+
+        if (!query.isEmpty() && !parameter.isEmpty()) {
+            String filterValue = JOptionPane.showInputDialog((Component) null, "Enter " + parameter + ":");
+            if (filterValue != null) {
+                ResultSet resultSet = MusicDatabaseConnector.executeFilterQuery(query, filterValue);
+
+                try {
+                    ContextPanel.setContextTable(resultSet);
+                } catch (SQLException var6) {
+                    var6.printStackTrace();
+                }
+            }
+        }
+    }
     /**
      * This method will remove the chosen PK associated with a table and refresh if successful.
      * If there are reference issues during delete then an exception popup will be given. 
