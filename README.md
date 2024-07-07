@@ -9,6 +9,7 @@ Gradle 7.4.2
 
 Load our database using the sql files with PD3_G8_SUM24_create then PD3_G8_SUM24_insert in your database 
 
+ER Diagram filename: PD3_G8_SUM24_drawio (png file)
 Git: https://github.com/rpdinaroASU/Project4
 Youtube Link: https://youtu.be/qKGeHbR8klI
 

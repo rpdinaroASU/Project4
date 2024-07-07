@@ -1,8 +1,10 @@
 package MusicDatabase.JDBC;
 import MusicDatabase.UI.*;
 
+import javax.print.attribute.DateTimeSyntax;
 import javax.swing.*;
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -104,195 +106,231 @@ public class MusicDatabaseConnector {
 
         return rs;
     }
-    public static void editButtonPress(ButtonInterface button, MenuButtons currentMenu, String pkSelection) {
+
+    /**
+     * This method will select the tuple values, their associated data types, and status as NOT NULL and/or a primary
+     * key of the table; it will append this information to a string and then split it for use in the EditFrame.
+     * @param pKey
+     * @param pkSelection
+     * @param tableName
+     * @return String[]
+     */
+    public static String[] editQuerySelectExecute(String tableName,String pKey,String pkSelection){
         Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        ResultSet primaryKeys = null;
+        Statement stmt = null;
+        ResultSet rsSEL = null,rsCOL = null;
+
+        if (Objects.equals(pkSelection, "")) {
+            return null;
+        }
+
+        String query1 = "SELECT * FROM " + tableName + "WHERE " + pKey + " = " + pkSelection + ";";
+        String query2 = "SHOW COLUMNS FROM " + tableName + ";";
+        StringBuilder sb = new StringBuilder();
+        String resultString;
+        String[] tupleString = null;
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, username, password);
-            statement = conn.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
-            if (button.equals(OptionButtons.Edit)) {
-                EditFrame.getInstance(editRecordSetup(currentMenu,pkSelection));
-                editSubmitPress(EditButtons.SUBMIT_EDIT);
-            }
-            ;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            System.err.println("Driver not found");
-        } finally {
-            try {
-                Objects.requireNonNull(rs).close();
-                Objects.requireNonNull(primaryKeys).close();
-                statement.close();
-                conn.close();
-            } catch (SQLException e) {
-                System.err.println("Issue closing resources");
-            }
+            stmt = conn.createStatement();
+            rsSEL = stmt.executeQuery(query1);
+            rsCOL = stmt.executeQuery(query2);
 
-        }
-    }
-    static String tablename, primarykey, pkselection;
-    static MenuButtons currentmenu;
-    static String[] colnames, updatestring;
-    public static void editSubmitPress(ButtonInterface button) {
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        ResultSet primaryKeys = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, username, password);
-            statement = conn.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
-            if (button.equals(EditButtons.SUBMIT_EDIT)) {
-
-                handleEdit(tablename,primarykey,pkselection,currentmenu,colnames,EditFrame.getjText());
-            }
-            ;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            System.err.println("Driver not found");
-        } finally {
-            try {
-                Objects.requireNonNull(rs).close();
-                Objects.requireNonNull(primaryKeys).close();
-                statement.close();
-                conn.close();
-            } catch (SQLException e) {
-                System.err.println("Issue closing resources");
-            }
-
-        }
-    }
-    private static String[] editRecordSetup(MenuButtons currentMenu, String pkSelection){
-        String tableName = "";
-        String primaryKey = "";
-        String[] colNames = null;
-
-        switch (currentMenu) {
-            case Songs -> {
-                tableName = "SONG";
-                primaryKey = "SongID";
-                colNames= new String[]{"Title"};
-            }
-            case Albums -> {
-                tableName = "ALBUM";
-                primaryKey = "AlbumID";
-                colNames= new String[]{"AlbumName"};
-            }
-            case RecordLabels -> {
-                tableName = "RECORD_LABEL";
-                primaryKey = "Label_ID";
-                colNames= new String[]{};
-            }
-            case Genres -> {
-                tableName = "GENRE";
-                primaryKey = "GenreID";
-                colNames= new String[]{"GenreName"};
-            }
-            case Contributors -> {
-                tableName = "CONTRIBUTOR";
-                primaryKey = "ContributorID";
-                colNames= new String[]{"FirstName", "LastName"};
-            }
-            case Playlists -> {
-                tableName = "PLAYLIST";
-                primaryKey = "PLID";
-                colNames= new String[]{"PlaylistName", "CreatorName"};
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
-        }
-
-        String[] tupleString = getTupleString(tableName, pkSelection, colNames, primaryKey);
-
-        tablename = tableName;
-        primarykey = primarykey;
-        pkselection = pkSelection;
-        currentmenu = currentMenu;
-        colnames = colNames;
-        return tupleString;
-    }
-
-    private static String[] getTupleString(String tableName, String pkSelection, String[] colNames, String primarykey) {
-        String[] sa = new String[colNames.length];
-        StringBuilder selectSB = new StringBuilder();
-        String selectSQL = "";
-
-        int i = 0;
-        selectSB.append("SELECT ");
-        while(i< colNames.length){
-            if(i>0){selectSB.append(",");}
-            selectSB.append(colNames[i]);
-            i++;
-        }
-        selectSB.append(" FROM ").append(tableName);
-        selectSB.append(" WHERE ").append(primarykey).append(" = ").append(pkSelection).append(";");
-        selectSQL = selectSB.toString();
-
-        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
-             Statement pstmt = conn.createStatement()){
-
-            ResultSet rs = pstmt.executeQuery(selectSQL);
-            int j= 0;
-            while(rs.next()){
-                sa[j] = rs.getString(j);
+            int i = 1;
+            while(rsCOL.next()) {
+                rsSEL.next();
+                sb.append(rsCOL.getString(1)).append(", ").append(rsCOL.getString(2));
+                if(rsCOL.getString(3).equalsIgnoreCase("NO")) sb.append("(NOT NULL)");
+                if(rsCOL.getString(4).equalsIgnoreCase("PRI")) sb.append("(Primary Key)");
+                if(rsCOL.getObject(5)!= null) sb.append(", '").append(rsCOL.getObject(5))
+                        .append("'");
+                sb.append(", ").append(rsSEL.getObject(i)).append(":\n");
+                i++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            String message = "failed to retrieve tuple data";
-            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException var7) {
+            System.err.println("Driver not found");
         }
-        return sa;
+
+        if(!sb.isEmpty()) {
+            String sbStr = sb.toString();
+            tupleString = sbStr.split("\n");
+        }
+        return tupleString;
     }
+    public static void executeUpdateQuery(String[] updateVals, MenuButtons currentMenu,String pkSelection) {
+        StringBuilder uQueryA,uQueryB;
+        String tableName,primaryKey,fQuery;
+        String[] tableCols;
 
-    private static void handleEdit(String tableName, String primaryKey, String pkSelection, MenuButtons currentMenu,
-                                   String[] colNames, String[] updateString){
-        if(pkSelection == ""){
-            System.out.println("No record found with the provided primary key.");
-            String message = "ERROR : Please select a record key in drop down.";
-            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
-        int i = 0;
-        StringBuilder editSQLsb = new StringBuilder("UPDATE " + tableName + " SET ");
-        while(i < colNames.length){
-            if(i>0){editSQLsb.append(",");}
-            editSQLsb.append(colNames[i]).append(" = ").append(updateString[i]);
-            i++;
-        }
-        editSQLsb.append(" WHERE ").append(primaryKey).append(" = ").append(pkSelection).append(";");
-        String editSQL = editSQLsb.toString();
 
-        try (Connection conn = DriverManager.getConnection(MusicDatabaseConnector.getUrl(), MusicDatabaseConnector.getUsername(), MusicDatabaseConnector.getPassword());
-             Statement stmt = conn.createStatement()){
+        uQueryA = new StringBuilder("UPDATE ? SET\n");
+        uQueryB = new StringBuilder("WHERE ? = ?;");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, username, password);
 
-            int rowUpdated = stmt.executeUpdate(editSQL);
+            switch (currentMenu) {
+                case Songs -> {
+                    tableName = TableNames.Song.getName();
+                    tableCols = TableNames.Song.getElements();
+                    primaryKey = TableNames.Song.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setDate(3, Date.valueOf(updateVals[1]));
+                    pstmt.setString(4, tableCols[2]);
+                    pstmt.setString(5, updateVals[2]);
+                    pstmt.setString(6, tableCols[3]);
+                    pstmt.setString(7, updateVals[3]);
+                    pstmt.setString(8, tableCols[0]);
+                    pstmt.setString(9, updateVals[0]);
 
-            if (rowUpdated > 0) {
+                }
+                case Albums -> {
+                    tableName = TableNames.Album.getName();
+                    tableCols = TableNames.Album.getElements();
+                    primaryKey = TableNames.Album.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setString(3, updateVals[1]);
+                    pstmt.setString(4, tableCols[2]);
+                    pstmt.setString(5, updateVals[2]);
+                    pstmt.setString(8, tableCols[0]);
+                    pstmt.setString(9, updateVals[0]);
+                }
+                case RecordLabels -> {
+                    tableName = TableNames.Record_Label.getName();
+                    tableCols = TableNames.Record_Label.getElements();
+                    primaryKey = TableNames.Record_Label.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setString(3, updateVals[1]);
+                    pstmt.setString(4, tableCols[2]);
+                    pstmt.setString(5, updateVals[2]);
+                    pstmt.setString(6, tableCols[0]);
+                    pstmt.setString(7, updateVals[0]);
+                }
+                case Genres -> {
+                    tableName = TableNames.Genre.getName();
+                    tableCols = TableNames.Genre.getElements();
+                    primaryKey = TableNames.Genre.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setString(3, updateVals[1]);
+                    pstmt.setString(6, tableCols[0]);
+                    pstmt.setString(7, updateVals[0]);
+                }
+                case Contributors -> {
+                    tableName = TableNames.Contributor.getName();
+                    tableCols = TableNames.Contributor.getElements();
+                    primaryKey = TableNames.Contributor.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setString(3, updateVals[1]);
+                    pstmt.setString(4, tableCols[2]);
+                    pstmt.setString(5, updateVals[2]);
+                    pstmt.setString(6, tableCols[3]);
+                    pstmt.setDate(7, Date.valueOf(updateVals[3]));
+                    pstmt.setString(8, tableCols[0]);
+                    pstmt.setString(9, updateVals[0]);
+                }
+                case Playlists -> {
+                    tableName = TableNames.Playlist.getName();
+                    tableCols = TableNames.Playlist.getElements();
+                    primaryKey = TableNames.Playlist.getpK();
+                    int i = 2;
+                    uQueryA.append("? = ?");
+                    while (i < tableCols.length) {
+                        uQueryA.append(",").append("? = ?");
+                        i++;
+                    }
+                    uQueryA.append("\n").append(uQueryB);
+                    fQuery = uQueryA.toString();
+                    pstmt = conn.prepareStatement(fQuery);
+                    pstmt.setString(1, tableName);
+                    pstmt.setString(2, tableCols[1]);
+                    pstmt.setString(3, updateVals[1]);
+                    pstmt.setString(4, tableCols[2]);
+                    pstmt.setString(5, updateVals[2]);
+                    pstmt.setString(6, tableCols[3]);
+                    pstmt.setDate(7, Date.valueOf(updateVals[3]));
+                    pstmt.setString(8, tableCols[0]);
+                    pstmt.setString(9, updateVals[0]);
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + currentMenu);
+            }
+
+
+            int updateBinary = pstmt.executeUpdate();
+            if(updateBinary != 0){
                 System.out.println("Record Updated successfully.");
                 OptionPanel.notifyMenuButtonPress();
                 MusicDatabaseConnector.menuButtonPress(currentMenu);
-
-            } else {
-                System.out.println("No record found with the provided primary key.");
-                String message = "ERROR : Please select a record key in drop down.";
-                JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            String message = "ERROR : There are other references to this table.";
-            JOptionPane.showMessageDialog(null, message, "Please try again", JOptionPane.INFORMATION_MESSAGE);
+
+
+        }catch(SQLException | ClassNotFoundException sexc){
+            sexc.printStackTrace();
+            throw new RuntimeException();
+        }finally{
+            System.out.println("Closing edit connection resources...");
+            try{
+                if(pstmt != null) pstmt.close();
+                if(conn != null) conn.close();
+                System.out.println("Finished.");
+            } catch(Exception e){ System.out.println(e.getMessage()); }
         }
     }
 

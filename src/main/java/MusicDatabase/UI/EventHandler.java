@@ -2,8 +2,6 @@ package MusicDatabase.UI;
 
 import java.awt.*;
 import java.sql.*;
-import java.util.Arrays;
-
 import javax.swing.JOptionPane;
 
 import MusicDatabase.JDBC.MusicDatabaseConnector;
@@ -43,10 +41,20 @@ public class EventHandler {
         else if(optionButton == OptionButtons.Edit) {
             String pkSelection = OptionPanel.getComboBoxSelection();
             MenuButtons currentMenu = (MenuButtons) OptionPanel.getCurrentMenu();
-            MusicDatabaseConnector.editButtonPress(OptionButtons.Edit,currentMenu,pkSelection);
+            String[] tupleString =
+                    MusicDatabaseConnector.editQuerySelectExecute(currentMenu.getName(),currentMenu.getpK(),pkSelection);
+            EditFrame.getInstance(tupleString);
         }
         else if(optionButton == OptionButtons.Filter) {
             FiltersFrame.getInstance();
+        }
+    }
+
+    public static void handleEditButtonEvent(EditButtons eButton){
+        if(eButton == EditButtons.UPDATE){
+            String[] updateValues = EditFrame.getinputText();
+            MusicDatabaseConnector.executeUpdateQuery(updateValues,
+                    (MenuButtons)OptionPanel.getCurrentMenu(),OptionPanel.getComboBoxSelection());
         }
     }
 
@@ -80,6 +88,7 @@ public class EventHandler {
             }
         }
     }
+
     /**
      * This method will remove the chosen PK associated with a table and refresh if successful.
      * If there are reference issues during delete then an exception popup will be given. 
@@ -313,12 +322,5 @@ public class EventHandler {
 	        }
 		
 	}
-
-    /**
-     * This method will update the chosen record after accepting an input from a JtextArea in a new frame
-     * @param currentMenu
-     * @param pkSelection
-     */
-
 
 }

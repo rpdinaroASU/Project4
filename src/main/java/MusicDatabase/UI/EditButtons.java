@@ -4,7 +4,7 @@ package MusicDatabase.UI;
  * @version 1.0.0
  */
 public enum EditButtons implements ButtonInterface {
-    SUBMIT_EDIT("Apply Edit");
+    UPDATE("Update");
 
     private final String name;
     EditButtons(String name) {
